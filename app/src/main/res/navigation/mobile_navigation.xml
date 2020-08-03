@@ -8,15 +8,38 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.a99Spicy.a99spicy.ui.home.HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_productListFragment"
+            app:destination="@id/productListFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+        <action
+            android:id="@+id/action_navigation_home_to_cartFragment"
+            app:destination="@id/cartFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.a99Spicy.a99spicy.ui.cart.CartFragment"
+        android:name="com.a99Spicy.a99spicy.ui.subscriptions.SubscriptionFragment"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.a99Spicy.a99spicy.ui.profile.ProfileFragment"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="com.a99Spicy.a99spicy.ui.products.ProductListFragment" >
+        <action
+            android:id="@+id/action_productListFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.a99Spicy.a99spicy.ui.cart.CartFragment"
+        android:label="cart_fragment"
+        tools:layout="@layout/cart_fragment" />
 </navigation>

@@ -23,4 +23,8 @@
     <string name="_99_00_rs">99.00 RS/-</string>
     <string name="add">Add</string>
     <string name="subscribe">Subscribe</string>
+    <string name="subscriptions">Subscriptions</string>
+    <string name="payable_amount">Payable Amount</string>
+    <string name="place_order">Place Order</string>
+    <string name="sign_out">Sign Out</string>
 </resources>

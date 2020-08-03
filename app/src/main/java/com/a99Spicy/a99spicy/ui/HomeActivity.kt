@@ -13,6 +13,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -59,7 +60,9 @@ class HomeActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
 
             if (destination.id == navController.graph.startDestination){
-
+                navView.visibility = View.VISIBLE
+            }else{
+                navView.visibility = View.GONE
             }
         }
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)

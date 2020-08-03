@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.a99Spicy.a99spicy.databinding.CategoryListItemBinding
 import com.a99Spicy.a99spicy.domain.DomainCategoryItem
+import timber.log.Timber
 
 class HomeCategoryAdapter(val clickListener: HomeCategoryClickListener):
 ListAdapter<DomainCategoryItem,HomeCategoryAdapter.HomeCategoryViewHolder>(HomeCategoryDiffUtilCallBack()){
@@ -39,7 +40,6 @@ ListAdapter<DomainCategoryItem,HomeCategoryAdapter.HomeCategoryViewHolder>(HomeC
     }
 
     override fun onBindViewHolder(holder: HomeCategoryViewHolder, position: Int) {
-
         val category = getItem(position)
         category?.let {
             holder.bind(category,clickListener)

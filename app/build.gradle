@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -107,4 +108,10 @@ dependencies {
 
     //ViewPager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+    //FireBase Analytics
+    implementation 'com.google.firebase:firebase-analytics:17.4.4'
+
+    //FireBase Authentication
+    implementation 'com.google.firebase:firebase-auth:19.3.2'
 }

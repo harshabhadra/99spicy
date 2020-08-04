@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "894739307320",
+    "firebase_url": "https://spicy-d9896.firebaseio.com",
+    "project_id": "spicy-d9896",
+    "storage_bucket": "spicy-d9896.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894739307320:android:84d5c9b95d29310f787fcd",
+        "android_client_info": {
+          "package_name": "com.a99Spicy.a99spicy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "894739307320-0qcn1jpf4clksl0vuiaa4jh0g6brs8vc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.a99Spicy.a99spicy",
+            "certificate_hash": "43cb265701e446d579d9deed434cc67754d960d7"
+          }
+        },
+        {
+          "client_id": "894739307320-6pi9rkh36tbmtea0d54hkl4st0mbga6q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALb0BJSUKf59ud1v9cy_nME42vS49cQt8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "894739307320-6pi9rkh36tbmtea0d54hkl4st0mbga6q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

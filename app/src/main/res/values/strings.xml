@@ -33,4 +33,18 @@
     <string name="shareandearn">Share and Earn</string>
     <string name="rate_us">Rate Us</string>
     <string name="demo_add">Deliver To: Kolkata, West Bengal, 730001</string>
+    <string name="number_verified_message">Phone number verified</string>
+    <string name="_12345">12345</string>
+    <string name="verify">Verify</string>
+    <string name="save_address">Save Address</string>
+    <string name="full_name">Full Name</string>
+    <string name="flat_no">Flat No.(Optional)</string>
+    <string name="building_no_house_no">Building No./House No./Building Name</string>
+    <string name="locality">Locality</string>
+    <string name="landmark">LandMark</string>
+    <string name="city_name">City Name</string>
+    <string name="district_name">District Name</string>
+    <string name="state_name">State Name</string>
+    <string name="wallet_balance">Wallet Balance</string>
+    <string name="transaction_report">Transaction Report</string>
 </resources>

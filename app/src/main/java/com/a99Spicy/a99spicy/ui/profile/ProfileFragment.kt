@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.databinding.FragmentProfileBinding
 import com.a99Spicy.a99spicy.ui.HomeActivity
@@ -15,7 +15,7 @@ import com.a99Spicy.a99spicy.utils.AppUtils
 class ProfileFragment : Fragment() {
 
     private lateinit var profileViewModel: ProfileViewModel
-    private lateinit var profileFragmentBinding:FragmentProfileBinding
+    private lateinit var profileFragmentBinding: FragmentProfileBinding
     private lateinit var profileItemsAdapter: ProfileItemsAdapter
 
     override fun onCreateView(
@@ -29,7 +29,7 @@ class ProfileFragment : Fragment() {
             ViewModelProvider(this).get(ProfileViewModel::class.java)
 
         //Initializing Layout
-        profileFragmentBinding = FragmentProfileBinding.inflate(inflater,container,false)
+        profileFragmentBinding = FragmentProfileBinding.inflate(inflater, container, false)
 
         val activity = activity as HomeActivity
         activity.setAppBarElevation(0F)
@@ -38,11 +38,29 @@ class ProfileFragment : Fragment() {
 
         //Setting up profile RecyclerView
         profileItemsAdapter = ProfileItemsAdapter(ProfileItemClickListener {
-
+            navigate(it)
         })
         profileFragmentBinding.profileRecycler.adapter = profileItemsAdapter
-        profileItemsAdapter.setProfileNameList(AppUtils.getProfileItemsList(requireContext()).toMutableList())
+        profileItemsAdapter.setProfileNameList(
+            AppUtils.getProfileItemsList(requireContext()).toMutableList()
+        )
 
         return profileFragmentBinding.root
+    }
+
+    private fun navigate(name: String) {
+
+        when (name) {
+
+            getString(R.string.wallet) -> {
+                findNavController().
+                navigate(ProfileFragmentDirections.actionNavigationNotificationsToWalletFragment())
+            }
+
+            getString(R.string.delivery_add) -> {
+                findNavController().
+                navigate(ProfileFragmentDirections.actionNavigationNotificationsToAddressFragment())
+            }
+        }
     }
 }

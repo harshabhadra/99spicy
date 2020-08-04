@@ -1,5 +1,6 @@
 package com.a99Spicy.a99spicy.user
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.databinding.FragmentLoginBinding
 import com.a99Spicy.a99spicy.ui.HomeActivity
+import com.a99Spicy.a99spicy.utils.Constants
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -146,8 +148,11 @@ class LoginFragment : Fragment() {
                             requireContext(),
                             "Sign in successfully: ${it.phoneNumber}",
                             Toast.LENGTH_SHORT
-                        )
-                            .show()
+                        ).show()
+                        val sharedPreferences = requireActivity().getSharedPreferences(Constants.LOG_IN,Context.MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putBoolean(Constants.IS_LOG_IN,true)
+                        editor.apply()
                         goToHome()
                     }
                 } else {
@@ -195,7 +200,7 @@ class LoginFragment : Fragment() {
         return dialog
     }
 
-    private fun goToHome(){
+    private fun goToHome() {
         val intent = Intent(requireActivity(), HomeActivity::class.java)
         startActivity(intent)
         requireActivity().finish()

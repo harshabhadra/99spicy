@@ -47,4 +47,5 @@
     <string name="state_name">State Name</string>
     <string name="wallet_balance">Wallet Balance</string>
     <string name="transaction_report">Transaction Report</string>
+    <string name="add_money">Add Money</string>
 </resources>

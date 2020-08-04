@@ -29,7 +29,7 @@
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.a99Spicy.a99spicy.ui.profile.ProfileFragment"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/productListFragment"
         android:name="com.a99Spicy.a99spicy.ui.products.ProductListFragment" >
@@ -40,6 +40,5 @@
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.a99Spicy.a99spicy.ui.cart.CartFragment"
-        android:label="cart_fragment"
         tools:layout="@layout/cart_fragment" />
 </navigation>

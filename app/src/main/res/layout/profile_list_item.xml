@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="name"
+            type="String" />
+            <variable
+                name="clickListener"
+                type="com.a99Spicy.a99spicy.ui.profile.ProfileItemClickListener" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{()->clickListener.onProfileItemClick(name)}">
 
         <TextView
             android:id="@+id/profile_item_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/open_sans"
+            android:fontFamily="@font/montserrat"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
+            android:text="@{name}"
             android:textColor="@android:color/black"
-            tools:text="My orders"
-            android:text="@{name}"/>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            tools:text="My orders" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

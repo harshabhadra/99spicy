@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.a99Spicy.a99spicy.R
+import com.a99Spicy.a99spicy.ui.HomeActivity
 
 class CartFragment : Fragment() {
 
@@ -21,6 +22,11 @@ class CartFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val activity = activity as HomeActivity
+        activity.setAppBarElevation(0F)
+        activity.setToolbarTitle(getString(R.string.title_cart))
+        activity.setToolbarLogo(null)
         return inflater.inflate(R.layout.cart_fragment, container, false)
     }
 

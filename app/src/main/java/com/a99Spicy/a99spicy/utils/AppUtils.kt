@@ -168,5 +168,18 @@ class AppUtils {
 
             return catList
         }
+
+        //dummy Profile items list
+        fun getProfileItemsList(context: Context):List<String>{
+            val list:MutableList<String> = mutableListOf()
+            list.add(context.getString(R.string.wallet))
+            list.add(context.getString(R.string.delivery_add))
+            list.add(context.getString(R.string.orders))
+            list.add(context.getString(R.string.settings))
+            list.add(context.getString(R.string.shareandearn))
+            list.add(context.getString(R.string.rate_us))
+
+            return list
+        }
     }
 }

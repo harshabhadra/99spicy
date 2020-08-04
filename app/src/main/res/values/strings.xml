@@ -27,4 +27,10 @@
     <string name="payable_amount">Payable Amount</string>
     <string name="place_order">Place Order</string>
     <string name="sign_out">Sign Out</string>
+    <string name="wallet">My Wallet</string>
+    <string name="orders">My Orders</string>
+    <string name="delivery_add">Delivery Address</string>
+    <string name="shareandearn">Share and Earn</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="demo_add">Deliver To: Kolkata, West Bengal, 730001</string>
 </resources>

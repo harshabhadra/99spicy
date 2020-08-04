@@ -69,6 +69,9 @@ class HomeFragment : Fragment() {
             }
         })
 
+        Timber.e("Getting response")
+        homeViewModel.getOrders()
+
         //Setting up HomeSlider
         val homeSliderAdapter = HomeSliderAdapter(AppUtils.getBannerList())
         homeFragmentBinding.homeSlider.setSliderAdapter(homeSliderAdapter)

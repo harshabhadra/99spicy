@@ -4,8 +4,8 @@ import android.content.Context
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.domain.DomainBannerItem
 import com.a99Spicy.a99spicy.domain.DomainCategoryItem
-import com.a99Spicy.a99spicy.domain.DomainProduct
-import com.a99Spicy.a99spicy.domain.DomainProducts
+import com.a99Spicy.a99spicy.domain.DomainDummyProduct
+import com.a99Spicy.a99spicy.domain.DomainDummyProducts
 
 class AppUtils {
 
@@ -22,9 +22,9 @@ class AppUtils {
         //Dummy category list
         fun getCategoryList(context: Context): List<DomainCategoryItem> {
 
-            val productList: MutableList<DomainProduct> = mutableListOf()
-            productList.add(
-                DomainProduct(
+            val dummyProductList: MutableList<DomainDummyProduct> = mutableListOf()
+            dummyProductList.add(
+                DomainDummyProduct(
                     "0",
                     context.getString(R.string.dawat_biriyani_basmati_rice),
                     "5Kg",
@@ -33,8 +33,8 @@ class AppUtils {
                     R.drawable.grocery_place_holder
                 )
             )
-            productList.add(
-                DomainProduct(
+            dummyProductList.add(
+                DomainDummyProduct(
                     "0",
                     context.getString(R.string.dawat_biriyani_basmati_rice),
                     "5Kg",
@@ -43,8 +43,8 @@ class AppUtils {
                     R.drawable.grocery_place_holder
                 )
             )
-            productList.add(
-                DomainProduct(
+            dummyProductList.add(
+                DomainDummyProduct(
                     "0",
                     context.getString(R.string.dawat_biriyani_basmati_rice),
                     "5Kg",
@@ -53,8 +53,8 @@ class AppUtils {
                     R.drawable.grocery_place_holder
                 )
             )
-            productList.add(
-                DomainProduct(
+            dummyProductList.add(
+                DomainDummyProduct(
                     "0",
                     context.getString(R.string.dawat_biriyani_basmati_rice),
                     "5Kg",
@@ -63,8 +63,8 @@ class AppUtils {
                     R.drawable.grocery_place_holder
                 )
             )
-            productList.add(
-                DomainProduct(
+            dummyProductList.add(
+                DomainDummyProduct(
                     "0",
                     context.getString(R.string.dawat_biriyani_basmati_rice),
                     "5Kg",
@@ -73,8 +73,8 @@ class AppUtils {
                     R.drawable.grocery_place_holder
                 )
             )
-            productList.add(
-                DomainProduct(
+            dummyProductList.add(
+                DomainDummyProduct(
                     "0",
                     context.getString(R.string.dawat_biriyani_basmati_rice),
                     "5Kg",
@@ -83,8 +83,8 @@ class AppUtils {
                     R.drawable.grocery_place_holder
                 )
             )
-            productList.add(
-                DomainProduct(
+            dummyProductList.add(
+                DomainDummyProduct(
                     "0",
                     context.getString(R.string.dawat_biriyani_basmati_rice),
                     "5Kg",
@@ -99,70 +99,70 @@ class AppUtils {
                 DomainCategoryItem(
                     R.drawable.grocery_place_holder,
                     "Grocery",
-                    DomainProducts(productList.toList())
+                    DomainDummyProducts(dummyProductList.toList())
                 )
             )
             catList.add(
                 DomainCategoryItem(
                     R.drawable.milk_placeholder,
                     "Milk",
-                    DomainProducts(productList.toList())
+                    DomainDummyProducts(dummyProductList.toList())
                 )
             )
             catList.add(
                 DomainCategoryItem(
                     R.drawable.grocery_place_holder,
                     "Vegetables",
-                    DomainProducts(productList.toList())
+                    DomainDummyProducts(dummyProductList.toList())
                 )
             )
             catList.add(
                 DomainCategoryItem(
                     R.drawable.grocery_place_holder,
                     "Fruits",
-                    DomainProducts(productList.toList())
+                    DomainDummyProducts(dummyProductList.toList())
                 )
             )
             catList.add(
                 DomainCategoryItem(
                     R.drawable.grocery_place_holder,
                     "Dairy",
-                    DomainProducts(productList.toList())
+                    DomainDummyProducts(dummyProductList.toList())
                 )
             )
             catList.add(
                 DomainCategoryItem(
                     R.drawable.grocery_place_holder,
                     "Bread",
-                    DomainProducts(productList.toList())
+                    DomainDummyProducts(dummyProductList.toList())
                 )
             )
             catList.add(
                 DomainCategoryItem(
                     R.drawable.grocery_place_holder,
                     "Branded Foods",
-                    DomainProducts(productList.toList())
+                    DomainDummyProducts(dummyProductList.toList())
                 )
             )
             catList.add(
                 DomainCategoryItem(
                     R.drawable.grocery_place_holder,
                     "Breakfast",
-                    DomainProducts(productList.toList())
+                    DomainDummyProducts(dummyProductList.toList())
                 )
             )
             catList.add(
                 DomainCategoryItem(
                     R.drawable.grocery_place_holder,
                     "Meat",
-                    DomainProducts(productList.toList())
+                    DomainDummyProducts(dummyProductList.toList())
                 )
             )
             catList.add(
                 DomainCategoryItem(
                     R.drawable.grocery_place_holder,
                     "Chicken",
-                    DomainProducts(productList.toList())
+                    DomainDummyProducts(dummyProductList.toList())
                 )
             )
 

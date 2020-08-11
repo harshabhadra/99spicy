@@ -1,9 +1,21 @@
 package com.a99Spicy.a99spicy.domain
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+data class DomainSortedProducts(
+    val sortedProductList:List<DomainSortedCategory>?
+)
 
-data class DomainProduct(
+data class DomainSortedCategory(
+    val catName:String,
+    val catimg:String?,
+    val subCatList:List<String>?
+)
+
+data class DomainSubCat(
+    val subCatName:String
+
+)
+
+data class DomainSortedProduct(
     var id: Int,
     var name: String,
     var slug: String,
@@ -30,28 +42,6 @@ data class DomainProduct(
     var ratingCount: Int,
     var relatedIds: List<Int>? = null,
     var purchaseNote: String? = "",
-    var categories: List<DomainCategory>,
-    var images: List<DomainImage>,
+    var productImg:String?="",
     var metaData: List<DomainMetaDatam>
 )
-
-@Parcelize
-data class DomainCategory(
-    var id: Int,
-    var name: String,
-    var slug: String
-) : Parcelable
-
-@Parcelize
-data class DomainImage(
-    var id: Int,
-    var src: String,
-    var name: String
-) : Parcelable
-
-@Parcelize
-data class DomainMetaDatam(
-    var id: Int,
-    var key: String,
-    var value: String
-) : Parcelable

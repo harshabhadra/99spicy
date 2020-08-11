@@ -17,10 +17,7 @@ import com.a99Spicy.a99spicy.utils.Constants
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.auth.*
 import com.mukesh.OtpView
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -153,7 +150,7 @@ class LoginFragment : Fragment() {
                         val editor = sharedPreferences.edit()
                         editor.putBoolean(Constants.IS_LOG_IN,true)
                         editor.apply()
-                        goToHome()
+                        getFirebaseToken(it)
                     }
                 } else {
                     // Sign in failed, display a message and update the UI
@@ -168,6 +165,23 @@ class LoginFragment : Fragment() {
                     }
                 }
             }
+    }
+
+    private fun getFirebaseToken(mUser:FirebaseUser) {
+
+        mUser.getIdToken(true)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val idToken = task.result!!.token
+                    // Send token to your backend via HTTPS
+                    Timber.e("Firebase token: $idToken")
+                    goToHome()
+                    // ...
+                } else {
+                    // Handle error -> task.getException();
+                }
+            }
+
     }
 
     //Create opt dialog

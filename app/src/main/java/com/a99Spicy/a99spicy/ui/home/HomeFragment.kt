@@ -12,7 +12,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -22,9 +21,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.a99Spicy.a99spicy.BuildConfig
+import com.a99Spicy.a99spicy.MyApplication
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.databinding.FragmentHomeBinding
-import com.a99Spicy.a99spicy.domain.LocationDetails
+import com.a99Spicy.a99spicy.domain.*
 import com.a99Spicy.a99spicy.ui.HomeActivity
 import com.a99Spicy.a99spicy.utils.AppUtils
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
@@ -34,25 +34,38 @@ import java.util.*
 
 class HomeFragment : Fragment() {
 
+    companion object{
+        const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
+    }
+
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var homeFragmentBinding: FragmentHomeBinding
     private lateinit var locationDetails: LocationDetails
-
-    private val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
 
     private lateinit var postCode: String
     private lateinit var city: String
     private lateinit var state: String
     private lateinit var district: String
+
+    private lateinit var domainSortedProduct: DomainSortedProducts
+
+    private var locationProductList:MutableSet<DomainProduct> = mutableSetOf()
+    private var locationProductSet:MutableSet<DomainProduct> = mutableSetOf()
+    private var categorySet: MutableSet<String> = mutableSetOf()
+
+    private var productList:MutableList<DomainProduct> = mutableListOf()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
+        val application = requireNotNull(this.activity).application as MyApplication
+        val homeViewModelFactory = HomeViewModelFactory(application)
         //Initializing ViewModel class
         homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
 
         //Inflating layout
         homeFragmentBinding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -69,8 +82,31 @@ class HomeFragment : Fragment() {
             }
         })
 
-        Timber.e("Getting response")
-        homeViewModel.getOrders()
+        //Observing dummyProducts live data from ViewModel class
+        homeViewModel.productListLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Timber.e("Total no. of products: ${it.size}")
+                productList = it.toMutableList()
+                getListByLocation(productList)
+            }
+        })
+
+        //Observing Categories from ViewModel class
+        homeViewModel.categoryListLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Timber.e("No. of categories: ${it.size}")
+                getSubCategories(locationProductList.toMutableList(),it)
+            }
+        })
+
+        //Observing Sorted category list from ViewModel
+        homeViewModel.sortedCategoryLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Timber.e("cat name: ${it[0].catName}")
+                domainSortedProduct = DomainSortedProducts(it)
+                homeViewModel.resetSortedCatList()
+            }
+        })
 
         //Setting up HomeSlider
         val homeSliderAdapter = HomeSliderAdapter(AppUtils.getBannerList())
@@ -88,6 +124,52 @@ class HomeFragment : Fragment() {
 
         setHasOptionsMenu(true)
         return homeFragmentBinding.root
+    }
+
+    private fun addToSortedList(cat: String, subCatNameSet:Set<String>?) {
+        val domainCategory = DomainSortedCategory(cat,"",subCatNameSet?.toList())
+        homeViewModel.setSortedCatList(domainCategory)
+    }
+
+    private fun getSubCategories(productList: MutableList<DomainProduct>?, catList: Set<String>) {
+
+        val subNameSet:MutableSet<String> = mutableSetOf()
+        productList?.let {
+            for (catName in catList) {
+                for (product in productList) {
+                    val catList = product.categories
+                    if (product.categories[1].name == catName) {
+                        subNameSet.add(product.categories[0].name)
+                    }
+                }
+                addToSortedList(catName, subNameSet)
+                subNameSet.clear()
+            }
+        }
+    }
+
+    private fun getCategoryList(locationProductSet: MutableSet<DomainProduct>) {
+        Timber.e("Product list by location: ${locationProductSet.size}")
+        for (product in locationProductSet){
+            val catList = product.categories
+           categorySet.add(catList[1].name)
+        }
+        homeViewModel.setCategoryList(categorySet)
+    }
+
+    private fun getListByLocation(productList: List<DomainProduct>) {
+
+        locationProductList.clear()
+        for (product in productList){
+            val metaList = product.metaData
+            for (meta in metaList){
+                if (meta.key.contains("delhi")){
+                    locationProductList.add(product)
+                }
+            }
+        }
+
+        getCategoryList(locationProductList)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

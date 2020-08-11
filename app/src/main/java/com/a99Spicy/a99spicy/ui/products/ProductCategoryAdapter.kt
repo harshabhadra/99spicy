@@ -2,7 +2,6 @@ package com.a99Spicy.a99spicy.ui.products
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.a99Spicy.a99spicy.databinding.ProductListItemBinding
 import com.a99Spicy.a99spicy.domain.DomainCategoryItem
-import timber.log.Timber
 
 class ProductCategoryAdapter(private val viewModelStoreOwner: ViewModelStoreOwner,private val viewLifecycleOwner: LifecycleOwner) :
     ListAdapter<DomainCategoryItem, ProductCategoryAdapter.ProductCategoryViewHolder>(
@@ -22,7 +20,7 @@ class ProductCategoryAdapter(private val viewModelStoreOwner: ViewModelStoreOwne
 
         fun bind(categoryItem: DomainCategoryItem, viewModelStoreOwner: ViewModelStoreOwner, viewLifecycleOwner: LifecycleOwner) {
 
-            val productList = categoryItem.products?.productList
+            val productList = categoryItem.dummyProducts?.dummyProductList
             productList?.let {
                 val productListAdapter = ProductListAdapter(viewModelStoreOwner,viewLifecycleOwner)
                 binding.productListRecyclerView.adapter = productListAdapter

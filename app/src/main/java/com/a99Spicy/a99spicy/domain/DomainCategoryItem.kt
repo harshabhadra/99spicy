@@ -7,5 +7,5 @@ import kotlinx.android.parcel.Parcelize
 data class DomainCategoryItem(
     val catImage:Int,
     val catName:String,
-    val products:DomainProducts? = null
+    val dummyProducts:DomainDummyProducts? = null
 ):Parcelable

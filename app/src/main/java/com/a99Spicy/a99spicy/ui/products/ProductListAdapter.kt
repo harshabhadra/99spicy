@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.a99Spicy.a99spicy.databinding.ProductSubItemListBinding
-import com.a99Spicy.a99spicy.domain.DomainProduct
+import com.a99Spicy.a99spicy.domain.DomainDummyProduct
 import timber.log.Timber
 
 private lateinit var viewModel: ProductListViewModel
@@ -21,18 +21,18 @@ class ProductListAdapter(
     private val owner: ViewModelStoreOwner,
     private val lifecycleOwner: LifecycleOwner
 ) :
-    ListAdapter<DomainProduct, ProductListAdapter.ProductListViewHolder>(ProductListDiffUtilCallBack()) {
+    ListAdapter<DomainDummyProduct, ProductListAdapter.ProductListViewHolder>(ProductListDiffUtilCallBack()) {
 
     class ProductListViewHolder private constructor(val binding: ProductSubItemListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(domainProduct: DomainProduct, viewLifeCycleOwner: LifecycleOwner) {
-            binding.product = domainProduct
+        fun bind(domainDummyProduct: DomainDummyProduct, viewLifeCycleOwner: LifecycleOwner) {
+            binding.product = domainDummyProduct
             val tv = binding.productDiscountTextView
             tv.paintFlags = tv.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 
-            val pActualPrice = domainProduct.productPrice.toDouble()
-            val discount = domainProduct.productDiscount.toDouble()
+            val pActualPrice = domainDummyProduct.productPrice.toDouble()
+            val discount = domainDummyProduct.productDiscount.toDouble()
             val productPrice = (discount / 100) * pActualPrice
             val save = pActualPrice.minus(productPrice)
             binding.productPriceTextView.text = "$productPrice Rs/-"
@@ -108,12 +108,12 @@ class ProductListAdapter(
     }
 }
 
-class ProductListDiffUtilCallBack : DiffUtil.ItemCallback<DomainProduct>() {
-    override fun areItemsTheSame(oldItem: DomainProduct, newItem: DomainProduct): Boolean {
+class ProductListDiffUtilCallBack : DiffUtil.ItemCallback<DomainDummyProduct>() {
+    override fun areItemsTheSame(oldItem: DomainDummyProduct, newItem: DomainDummyProduct): Boolean {
         return oldItem === newItem
     }
 
-    override fun areContentsTheSame(oldItem: DomainProduct, newItem: DomainProduct): Boolean {
+    override fun areContentsTheSame(oldItem: DomainDummyProduct, newItem: DomainDummyProduct): Boolean {
         return oldItem.productId == newItem.productId
     }
 

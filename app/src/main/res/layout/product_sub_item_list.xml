@@ -6,7 +6,7 @@
     <data>
         <variable
             name="product"
-            type="com.a99Spicy.a99spicy.domain.DomainProduct" />
+            type="com.a99Spicy.a99spicy.domain.DomainDummyProduct" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

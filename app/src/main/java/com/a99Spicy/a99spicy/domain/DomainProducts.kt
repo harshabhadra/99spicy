@@ -3,6 +3,12 @@ package com.a99Spicy.a99spicy.domain
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
+@Parcelize
+data class DomainProducts(
+    val productList:List<DomainProduct>
+):Parcelable
+
+@Parcelize
 data class DomainProduct(
     var id: Int,
     var name: String,
@@ -33,7 +39,7 @@ data class DomainProduct(
     var categories: List<DomainCategory>,
     var images: List<DomainImage>,
     var metaData: List<DomainMetaDatam>
-)
+):Parcelable
 
 @Parcelize
 data class DomainCategory(

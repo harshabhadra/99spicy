@@ -7,6 +7,10 @@
 
     </data>
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/product_root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,14 +21,14 @@
             android:id="@+id/category_tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:background="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tabIndicatorColor="@android:color/white"
+            app:tabIndicatorColor="@android:color/black"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="@android:color/white"
-            app:tabTextColor="@android:color/white" />
+            app:tabSelectedTextColor="@android:color/black"
+            app:tabTextColor="@android:color/darker_gray" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/category_viewPager"
@@ -35,4 +39,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/category_tabLayout" />
     </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

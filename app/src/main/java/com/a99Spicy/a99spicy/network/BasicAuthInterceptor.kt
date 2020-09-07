@@ -9,13 +9,14 @@ import java.io.IOException
 
 class BasicAuthInterceptor(user: String, password: String) :
     Interceptor {
+
     private val authToken: String = Credentials.basic(user, password)
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
         val headers: Headers =
-            request.headers().newBuilder().add("Authorization", authToken).build()
+            request.headers.newBuilder().add("Authorization", authToken).build()
         request = request.newBuilder().headers(headers).build()
         return chain.proceed(request)
     }

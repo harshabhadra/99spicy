@@ -10,6 +10,9 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.databinding.FragmentLoginBinding
 import com.a99Spicy.a99spicy.ui.HomeActivity
@@ -34,11 +37,15 @@ class LoginFragment : Fragment() {
 
     private lateinit var otp: String
     private lateinit var phoneNumber: String
+    private lateinit var userId:String
 
     private lateinit var otpDialog: AlertDialog
     private lateinit var otpView: OtpView
     private lateinit var verifyOtpButton: MaterialButton
     private lateinit var otpProgressBar: ProgressBar
+    private lateinit var loadingDialog: AlertDialog
+
+    private lateinit var viewModel: SplashViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +55,8 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
         loginFragmentLoginBinding = FragmentLoginBinding.inflate(inflater, container, false)
 
+        viewModel = ViewModelProvider(this).get(SplashViewModel::class.java)
+
         //Initializing FireBase Auth
         mAuth = FirebaseAuth.getInstance()
 
@@ -55,15 +64,11 @@ class LoginFragment : Fragment() {
         mCallBacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                // This callback will be invoked in two situations:
-                // 1 - Instant verification. In some cases the phone number can be instantly
-                //     verified without needing to send or enter a verification code.
-                // 2 - Auto-retrieval. On some devices Google Play services can automatically
-                //     detect the incoming verification SMS and perform verification without
-                //     user action.
                 Timber.e("onVerificationCompleted:$credential")
-                otpDialog.dismiss()
-                signInWithPhoneAuthCredential(credential)
+//                otpDialog.dismiss()
+//                signInWithPhoneAuthCredential(credential)
+                otpView.isEnabled = true
+                verifyOtpButton.isEnabled = true
             }
 
             override fun onVerificationFailed(e: FirebaseException) {
@@ -90,12 +95,6 @@ class LoginFragment : Fragment() {
                 verificationId: String,
                 token: PhoneAuthProvider.ForceResendingToken
             ) {
-                // The SMS verification code has been sent to the provided phone number, we
-                // now need to ask the user to enter the code and then construct a credential
-                // by combining the code with a verification ID.
-                Timber.e("onCodeSent:$verificationId")
-
-                // Save verification ID and resending token so we can use them later
                 mVerificationId = verificationId
                 mResendToken = token
 
@@ -114,10 +113,41 @@ class LoginFragment : Fragment() {
 
         //Set onClickListener to generate otp button
         loginFragmentLoginBinding.logInGenerateOtpButton.setOnClickListener {
-
             phoneNumber = loginFragmentLoginBinding.logInPhoneTextInpu.text.toString()
-            sendOtp(phoneNumber)
+            sendOtp("+91${phoneNumber}")
         }
+
+        //Set onClickListener to create User button
+        loginFragmentLoginBinding.logInCreateAccountButton.setOnClickListener {
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
+        }
+
+        //Observe fTokenLiveData
+        viewModel.fTokenLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                viewModel.loginUser(phoneNumber, "+91", it, otp)
+                viewModel.resetFToken()
+            }
+        })
+
+        //observe loginLiveData
+        viewModel.loginLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                userId = it.data.userId
+                Toast.makeText(requireContext(),"Log in Successful", Toast.LENGTH_SHORT).show()
+                loadingDialog.dismiss()
+                val sharedPreferences = requireActivity().getSharedPreferences(
+                    Constants.LOG_IN,
+                    Context.MODE_PRIVATE
+                )
+                val editor = sharedPreferences.edit()
+                editor.putBoolean(Constants.IS_LOG_IN, true)
+                editor.putString(Constants.SAVED_USER_ID, userId)
+                editor.putString(Constants.PHONE, phoneNumber)
+                editor.apply()
+                goToHome(userId)
+            }
+        })
         return loginFragmentLoginBinding.root
     }
 
@@ -134,6 +164,9 @@ class LoginFragment : Fragment() {
     //Sign in with phone number to firebase
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
 
+        loadingDialog = createLoadingDialog()
+        loadingDialog.show()
+
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
@@ -141,15 +174,6 @@ class LoginFragment : Fragment() {
                     Timber.e("signInWithCredential:success")
                     val user = task.result?.user
                     user?.let {
-                        Toast.makeText(
-                            requireContext(),
-                            "Sign in successfully: ${it.phoneNumber}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        val sharedPreferences = requireActivity().getSharedPreferences(Constants.LOG_IN,Context.MODE_PRIVATE)
-                        val editor = sharedPreferences.edit()
-                        editor.putBoolean(Constants.IS_LOG_IN,true)
-                        editor.apply()
                         getFirebaseToken(it)
                     }
                 } else {
@@ -167,21 +191,24 @@ class LoginFragment : Fragment() {
             }
     }
 
-    private fun getFirebaseToken(mUser:FirebaseUser) {
+    private fun getFirebaseToken(mUser: FirebaseUser) {
 
         mUser.getIdToken(true)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val idToken = task.result!!.token
+                    idToken?.let {
+                        viewModel.setFToken(it)
+                    }
                     // Send token to your backend via HTTPS
-                    Timber.e("Firebase token: $idToken")
-                    goToHome()
                     // ...
                 } else {
                     // Handle error -> task.getException();
+                    loadingDialog.dismiss()
+                    Toast.makeText(requireContext(), task.exception.toString(), Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
-
     }
 
     //Create opt dialog
@@ -214,9 +241,18 @@ class LoginFragment : Fragment() {
         return dialog
     }
 
-    private fun goToHome() {
+    private fun goToHome(userId:String) {
         val intent = Intent(requireActivity(), HomeActivity::class.java)
+        intent.putExtra(Constants.USER_ID, userId)
         startActivity(intent)
         requireActivity().finish()
+    }
+
+    private fun createLoadingDialog(): AlertDialog {
+        val layout = LayoutInflater.from(requireContext()).inflate(R.layout.loading_layout, null)
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(layout)
+        builder.setCancelable(false)
+        return builder.create()
     }
 }

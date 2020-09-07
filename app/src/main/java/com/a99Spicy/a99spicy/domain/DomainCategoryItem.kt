@@ -4,8 +4,14 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
+data class DomainCategoryItems(
+    val categoryList:List<DomainCategoryItem>
+):Parcelable
+
+@Parcelize
 data class DomainCategoryItem(
-    val catImage:Int,
-    val catName:String,
-    val dummyProducts:DomainDummyProducts? = null
+    val catId:Int,
+    val parentId:Int,
+    val catImage:String?="",
+    val catName:String
 ):Parcelable

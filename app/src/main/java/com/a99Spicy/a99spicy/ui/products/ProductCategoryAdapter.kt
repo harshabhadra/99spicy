@@ -8,23 +8,37 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.a99Spicy.a99spicy.databinding.ProductListItemBinding
-import com.a99Spicy.a99spicy.domain.DomainCategoryItem
+import com.a99Spicy.a99spicy.domain.DomainProduct
+import com.a99Spicy.a99spicy.domain.DomainProducts
 
-class ProductCategoryAdapter(private val viewModelStoreOwner: ViewModelStoreOwner,private val viewLifecycleOwner: LifecycleOwner) :
-    ListAdapter<DomainCategoryItem, ProductCategoryAdapter.ProductCategoryViewHolder>(
+private val productList: MutableSet<DomainProduct> = mutableSetOf()
+
+class ProductCategoryAdapter(
+    private val viewModelStoreOwner: ViewModelStoreOwner,
+    private val viewLifecycleOwner: LifecycleOwner,
+    private val onProductItemClickListener: ProductListAdapter.OnProductItemClickListener,
+    private val onProductMinusClickListener: ProductListAdapter.OnProductMinusClickListener
+) :
+    ListAdapter<DomainProducts, ProductCategoryAdapter.ProductCategoryViewHolder>(
         ProductCategoryDiffUtilCallBack()
     ) {
 
     class ProductCategoryViewHolder private constructor(val binding: ProductListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(categoryItem: DomainCategoryItem, viewModelStoreOwner: ViewModelStoreOwner, viewLifecycleOwner: LifecycleOwner) {
-
-            val productList = categoryItem.dummyProducts?.dummyProductList
-            productList?.let {
-                val productListAdapter = ProductListAdapter(viewModelStoreOwner,viewLifecycleOwner)
+        fun bind(
+            categoryItem: DomainProducts,
+            viewModelStoreOwner: ViewModelStoreOwner,
+            viewLifecycleOwner: LifecycleOwner,
+            onProductItemClickListener: ProductListAdapter.OnProductItemClickListener,
+            onProductMinusClickListener: ProductListAdapter.OnProductMinusClickListener
+        ) {
+            productList.addAll(categoryItem.productList)
+            if (productList.isNotEmpty()) {
+                val productListAdapter = ProductListAdapter(viewModelStoreOwner,
+                    viewLifecycleOwner, onProductItemClickListener,onProductMinusClickListener)
                 binding.productListRecyclerView.adapter = productListAdapter
-                productListAdapter.submitList(it)
+                productListAdapter.submitList(categoryItem.productList.toList())
             }
             binding.executePendingBindings()
         }
@@ -51,24 +65,25 @@ class ProductCategoryAdapter(private val viewModelStoreOwner: ViewModelStoreOwne
 
         val productCategory = getItem(position)
         productCategory?.let {
-            holder.bind(it,viewModelStoreOwner, viewLifecycleOwner)
+            holder.bind(it, viewModelStoreOwner, viewLifecycleOwner,
+                onProductItemClickListener,onProductMinusClickListener)
         }
     }
 }
 
-class ProductCategoryDiffUtilCallBack : DiffUtil.ItemCallback<DomainCategoryItem>() {
+class ProductCategoryDiffUtilCallBack : DiffUtil.ItemCallback<DomainProducts>() {
     override fun areItemsTheSame(
-        oldItem: DomainCategoryItem,
-        newItem: DomainCategoryItem
+        oldItem: DomainProducts,
+        newItem: DomainProducts
     ): Boolean {
         return oldItem === newItem
     }
 
     override fun areContentsTheSame(
-        oldItem: DomainCategoryItem,
-        newItem: DomainCategoryItem
+        oldItem: DomainProducts,
+        newItem: DomainProducts
     ): Boolean {
-        return oldItem.catName == newItem.catName
+        return oldItem.productList == newItem.productList
     }
 
 }

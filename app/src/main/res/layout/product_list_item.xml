@@ -16,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="vertical"
-            tools:listitem="@layout/product_sub_item_list" />
+            tools:listitem="@layout/product_sub_cat_list_item" />
     </LinearLayout>
 </layout>

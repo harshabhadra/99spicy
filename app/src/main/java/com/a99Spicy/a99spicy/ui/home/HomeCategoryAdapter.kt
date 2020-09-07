@@ -2,11 +2,14 @@ package com.a99Spicy.a99spicy.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.databinding.CategoryListItemBinding
 import com.a99Spicy.a99spicy.domain.DomainCategoryItem
+import com.bumptech.glide.Glide
 import timber.log.Timber
 
 class HomeCategoryAdapter(val clickListener: HomeCategoryClickListener):
@@ -18,6 +21,16 @@ ListAdapter<DomainCategoryItem,HomeCategoryAdapter.HomeCategoryViewHolder>(HomeC
         fun bind(domainCategoryItem: DomainCategoryItem, clickListener: HomeCategoryClickListener) {
             binding.categoryItem = domainCategoryItem
             binding.clickListener = clickListener
+            val imgUrl = domainCategoryItem.catImage
+            imgUrl?.let {
+                val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
+                Glide.with(binding.categoryImage.context)
+                    .load(imgUri)
+                    .placeholder(R.drawable.app_logo)
+                    .error(R.drawable.app_logo)
+                    .centerCrop()
+                    .into(binding.categoryImage)
+            }
             binding.executePendingBindings()
         }
 

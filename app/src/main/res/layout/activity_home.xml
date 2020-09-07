@@ -10,29 +10,37 @@
         style="@style/AppTheme.AppBarOverlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/white"
         android:elevation="0dp"
         app:elevation="0dp">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/home_toolbar"
-            style="@style/AppTheme.PopupOverlay"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:logo="@drawable/ic_action_white_logo"
-            app:title=""
-            app:titleTextColor="@android:color/white">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/toolbar_TextView"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="32dp"
-                android:fontFamily="@font/fredoka_one"
-                android:gravity="center"
-                android:text="@string/app_name"
-                android:textColor="@android:color/white" />
-        </androidx.appcompat.widget.Toolbar>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/home_toolbar"
+                style="@style/AppTheme.PopupOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/white"
+                app:logo="@drawable/ic_action_white_logo"
+                app:title=""
+                app:titleTextColor="@android:color/white">
+
+                <TextView
+                    android:id="@+id/toolbar_TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="32dp"
+                    android:fontFamily="@font/fredoka_one"
+                    android:gravity="center"
+                    android:text="@string/app_name"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/dimen_16sp" />
+            </androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <fragment
@@ -40,7 +48,7 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginTop="58dp"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

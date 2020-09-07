@@ -1,254 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.profile.delivery.AddressFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <data>
+        <variable
+            name="location"
+            type="com.a99Spicy.a99spicy.domain.LocationDetails" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorProfileBack"
-        tools:context=".ui.profile.seller.AddShopDetailsFragment">
+        tools:context=".ui.profile.delivery.AddressFragment">
 
-        <ScrollView
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorProfileBack">
+            android:background="@color/colorProfileBack"
+            tools:context=".ui.profile.seller.AddShopDetailsFragment">
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="64dp">
+                android:layout_height="match_parent"
+                android:background="@color/colorProfileBack">
 
-                <com.google.android.material.card.MaterialCardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:elevation="6dp"
-                    app:cardBackgroundColor="@android:color/white"
-                    app:cardCornerRadius="0dp">
+                    android:orientation="vertical"
+                    android:layout_marginBottom="64dp">
 
-                    <LinearLayout
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/name_textInputLayout"
+                        android:elevation="6dp"
+                        app:cardBackgroundColor="@android:color/white"
+                        app:cardCornerRadius="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/address_name_textInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="16dp">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/address_name_textInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@android:color/white"
+                                    android:hint="@string/full_name"
+                                    android:fontFamily="@font/open_sans"
+                                    android:inputType="text"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/address_phone_number_textInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="16dp">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/phone_number_textInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@android:color/white"
+                                    android:hint="@string/mobile_number"
+                                    android:fontFamily="@font/open_sans"
+                                    android:inputType="phone"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp">
+                        app:cardBackgroundColor="@android:color/white"
+                        app:cardCornerRadius="0dp"
+                        app:cardElevation="6dp">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/name_textInput"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@android:color/white"
-                            android:hint="@string/full_name"
-                            android:fontFamily="@font/open_sans"
-                            android:inputType="text"
-                            android:maxLines="1" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:orientation="vertical"
+                            android:layout_marginBottom="32dp">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/phone_number_textInputLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/phone_number_textInput"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@android:color/white"
-                            android:hint="@string/full_name"
-                            android:fontFamily="@font/open_sans"
-                            android:inputType="phone"
-                            android:maxLines="1"
-                            />
-                    </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:cardBackgroundColor="@android:color/white"
-                    app:cardCornerRadius="0dp"
-                    app:cardElevation="6dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginBottom="32dp">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/flat_no_textInputLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="8dp">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/flat_no_textInput"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/flat_no_textInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@android:color/white"
-                                android:hint="@string/flat_no"
-                                android:inputType="text"
-                                android:maxLines="1"
-                                />
-                        </com.google.android.material.textfield.TextInputLayout>
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="8dp">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/shop_buildingNo_textInputLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="8dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/flat_no_textInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@android:color/white"
+                                    android:hint="@string/flat_no"
+                                    android:inputType="text"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/shop_buildingNo_textInput"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/shop_buildingNo_textInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@android:color/white"
-                                android:hint="@string/building_no_house_no"
-                                android:inputType="text"
-                                android:maxLines="1" />
-                        </com.google.android.material.textfield.TextInputLayout>
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="8dp">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/shop_locality_textInputLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="8dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/shop_buildingNo_textInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@android:color/white"
+                                    android:hint="@string/building_no_house_no"
+                                    android:inputType="text"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/shop_locality_textInput"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/shop_locality_textInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@android:color/white"
-                                android:hint="@string/locality"
-                                android:inputType="textMultiLine"
-                                />
-                        </com.google.android.material.textfield.TextInputLayout>
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="8dp">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/shop_landmark_textInputLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="8dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/shop_locality_textInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@android:color/white"
+                                    android:hint="@string/locality"
+                                    android:inputType="textMultiLine" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/shop_landmark_textInput"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/shop_post_code_textInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@android:color/white"
-                                android:hint="@string/landmark"
-                                android:inputType="text"
-                                android:maxLines="1" />
-                        </com.google.android.material.textfield.TextInputLayout>
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="8dp">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/shop_city_textInputLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="8dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/shop_post_code_textInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@android:color/white"
+                                    android:hint="@string/postal_code"
+                                    android:enabled="false"
+                                    android:text="@{location.postCode}"
+                                    android:inputType="text" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/shop_city_textInput"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/shop_landmark_textInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@android:color/white"
-                                android:hint="@string/city_name"
-                                android:inputType="text"
-                                android:maxLines="1" />
-                        </com.google.android.material.textfield.TextInputLayout>
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="8dp">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/shop_district_textInputLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="8dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/shop_landmark_textInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@android:color/white"
+                                    android:hint="@string/landmark"
+                                    android:inputType="text"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/shop_district_textInput"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/shop_city_textInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@android:color/white"
-                                android:hint="@string/district_name"
-                                android:inputType="text"
-                                android:maxLines="1" />
-                        </com.google.android.material.textfield.TextInputLayout>
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="8dp">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/shop_state_textInputLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="8dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/shop_city_textInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@android:color/white"
+                                    android:hint="@string/city_name"
+                                    android:inputType="text"
+                                    android:text="@{location.city}"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/shop_state_textInput"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/shop_district_textInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@android:color/white"
-                                android:hint="@string/state_name"
-                                android:inputType="text"
-                                android:maxLines="1" />
-                        </com.google.android.material.textfield.TextInputLayout>
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="8dp">
 
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-        </ScrollView>
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/shop_district_textInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@android:color/white"
+                                    android:hint="@string/district_name"
+                                    android:inputType="text"
+                                    android:text="@{location.district}"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardElevation="8dp"
-            android:background="@android:color/white"
-            app:cardBackgroundColor="@android:color/white"
-            android:layout_gravity="bottom">
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/shop_details_save_button"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/shop_state_textInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="8dp">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/shop_state_textInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@android:color/white"
+                                    android:hint="@string/state_name"
+                                    android:inputType="text"
+                                    android:text="@{location.state}"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </ScrollView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:padding="16dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/save_address" />
-        </com.google.android.material.card.MaterialCardView>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                app:cardElevation="8dp"
+                android:background="@android:color/white"
+                app:cardBackgroundColor="@android:color/white"
+                android:layout_gravity="bottom">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/address_details_save_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:padding="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/save_address" />
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
-</FrameLayout>
+    </FrameLayout>
+</layout>

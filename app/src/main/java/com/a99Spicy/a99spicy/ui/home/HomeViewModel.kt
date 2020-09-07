@@ -8,68 +8,94 @@ import com.a99Spicy.a99spicy.MyApplication
 import com.a99Spicy.a99spicy.Repository
 import com.a99Spicy.a99spicy.database.MyDatabase
 import com.a99Spicy.a99spicy.domain.DomainProduct
+import com.a99Spicy.a99spicy.domain.DomainProducts
 import com.a99Spicy.a99spicy.domain.DomainSortedCategory
 import com.a99Spicy.a99spicy.domain.LocationDetails
 import com.a99Spicy.a99spicy.network.Api
+import com.a99Spicy.a99spicy.network.ProductCategory
+import com.a99Spicy.a99spicy.network.Profile
+import com.a99Spicy.a99spicy.ui.profile.Loading
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
-private var pList: MutableSet<DomainProduct> = mutableSetOf()
-private var sortedCatList:MutableSet<DomainSortedCategory> = mutableSetOf()
+enum class HomeLoading{
+    SUCCESS, FAILED, PENDING
+}
 
 class HomeViewModel(application: MyApplication) : ViewModel() {
 
     private val viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val apiService = Api.retroService
+    private val apiService = Api.retrofitService
 
     private val database = MyDatabase.getDatabase(application)
     private val repository = Repository(database)
 
-    private var _locationMutableLiveData = MutableLiveData<LocationDetails>()
-    val locationLiveData: LiveData<LocationDetails>
-        get() = _locationMutableLiveData
+    private var _domainProductsMutableLiveData = MutableLiveData<List<DomainProducts>>()
+    val domainProductsLiveData: LiveData<List<DomainProducts>>
+        get() = _domainProductsMutableLiveData
 
-    private var _categoryListMutableLiveData = MutableLiveData<Set<String>>()
-    val categoryListLiveData: LiveData<Set<String>>
-        get() = _categoryListMutableLiveData
+    private var _subCategoriesMutableLiveData = MutableLiveData<Set<ProductCategory>>()
+    val subCategoriesLiveData: LiveData<Set<ProductCategory>>
+        get() = _subCategoriesMutableLiveData
 
-    private var _sortedCatListMutableLiveData = MutableLiveData<List<DomainSortedCategory>>()
-    val sortedCategoryLiveData:LiveData<List<DomainSortedCategory>>
-    get() = _sortedCatListMutableLiveData
+    private var _profileMutableLiveData = MutableLiveData<Profile>()
+    val profileLiveData: LiveData<Profile>
+        get() = _profileMutableLiveData
+
+    private var _loadingMutableLiveData = MutableLiveData<HomeLoading>()
+    val loadingLiveData:LiveData<HomeLoading>
+        get() = _loadingMutableLiveData
 
     init {
-
-        _categoryListMutableLiveData.value = null
-        _locationMutableLiveData.value = null
-        _sortedCatListMutableLiveData.value = null
-
+        _domainProductsMutableLiveData.value = null
+        _subCategoriesMutableLiveData.value = null
         uiScope.launch {
             repository.refreshProducts()
+            repository.refreshCategories()
         }
     }
 
-    //Getting all dummyProducts
+    //Getting all categories
+    val categoriesLiveData = repository.categoryList
+
     val productListLiveData = repository.productList
-
-    fun setLocationData(locationDetails: LocationDetails) {
-        _locationMutableLiveData.value = locationDetails
+    //Get user profile
+    fun getProfile(userId: String) {
+        uiScope.launch {
+            val responseDeferred = apiService.getSingleCustomerAsync(userId)
+            try {
+                _loadingMutableLiveData.value = HomeLoading.PENDING
+                val response = responseDeferred.await()
+                _profileMutableLiveData.value = response
+                _loadingMutableLiveData.value = HomeLoading.SUCCESS
+                Timber.e("Successfully received profile")
+            } catch (e: Exception) {
+                Timber.e("Failed to get user profile: ${e.message}")
+                _profileMutableLiveData.value = null
+                _loadingMutableLiveData.value = HomeLoading.FAILED
+            }
+        }
     }
 
-    fun setCategoryList(catList: Set<String>) {
-        _categoryListMutableLiveData.value = catList
+    fun getSubCategories(parentId: Int) {
+        uiScope.launch {
+            val subCategoriesDeferred =
+                apiService.getSubCategoriesAsync(parentId)
+            try {
+                _subCategoriesMutableLiveData.value = subCategoriesDeferred.await().toSet()
+            }catch (e:Exception){
+                Timber.e("Failed to get subcategoreis: ${e.message}")
+            }
+        }
     }
 
-    fun setSortedCatList(domainSortedCategory: DomainSortedCategory){
-        sortedCatList.add(domainSortedCategory)
-        _sortedCatListMutableLiveData.value = sortedCatList.toList()
-    }
-
-    fun resetSortedCatList(){
-        _sortedCatListMutableLiveData.value = null
+    fun setDomainProductList(list: List<DomainProducts>) {
+        _domainProductsMutableLiveData.value = list
     }
 
     override fun onCleared() {

@@ -11,65 +11,127 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.a99Spicy.a99spicy.R
+import com.a99Spicy.a99spicy.database.DatabaseCart
 import com.a99Spicy.a99spicy.databinding.ProductSubItemListBinding
-import com.a99Spicy.a99spicy.domain.DomainDummyProduct
+import com.a99Spicy.a99spicy.domain.DomainProduct
+import com.squareup.picasso.Picasso
 import timber.log.Timber
 
 private lateinit var viewModel: ProductListViewModel
 private var qty = 0
+private var pQty = 0
+
 class ProductListAdapter(
     private val owner: ViewModelStoreOwner,
-    private val lifecycleOwner: LifecycleOwner
+    private val lifecycleOwner: LifecycleOwner,
+    private val onProductItemClickListener: OnProductItemClickListener,
+    private val onProductMinusClickListener: OnProductMinusClickListener
 ) :
-    ListAdapter<DomainDummyProduct, ProductListAdapter.ProductListViewHolder>(ProductListDiffUtilCallBack()) {
+    ListAdapter<DomainProduct, ProductListAdapter.ProductListViewHolder>(ProductListDiffUtilCallBack()) {
 
+    interface OnProductItemClickListener {
+        fun onProductItemClick(position: Int, quantity: Int)
+    }
+
+    interface OnProductMinusClickListener{
+        fun onProductMinusClick(position: Int,quantity: Int)
+    }
     class ProductListViewHolder private constructor(val binding: ProductSubItemListBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
-        fun bind(domainDummyProduct: DomainDummyProduct, viewLifeCycleOwner: LifecycleOwner) {
+        fun bind(
+            domainDummyProduct: DomainProduct,
+            viewLifeCycleOwner: LifecycleOwner,
+            onProductItemClickListener: OnProductItemClickListener,
+            onProductMinusClickListener: OnProductMinusClickListener
+        ) {
             binding.product = domainDummyProduct
             val tv = binding.productDiscountTextView
             tv.paintFlags = tv.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 
-            val pActualPrice = domainDummyProduct.productPrice.toDouble()
-            val discount = domainDummyProduct.productDiscount.toDouble()
-            val productPrice = (discount / 100) * pActualPrice
-            val save = pActualPrice.minus(productPrice)
-            binding.productPriceTextView.text = "$productPrice Rs/-"
-            binding.savingTextView.text = "Your Save ${save} Rs/-"
+            val imgUrl = domainDummyProduct.images[0].src
+            if (imgUrl.isNotEmpty()) {
+                Picasso.get().load(imgUrl).placeholder(R.drawable.app_logo)
+                    .error(R.drawable.grocery_place_holder).into(binding.productImageView)
+            }
 
+//            val pActualPrice = domainDummyProduct.salePrice?.toDouble()
+//
+//            pActualPrice?.let {
+//                val save = domainDummyProduct.regularPrice?.toDouble()?.minus(it)
+//                binding.productPriceTextView.text = "$pActualPrice Rs/-"
+//                binding.savingTextView.text = "Your Save ${save} Rs/-"
+//            }
             binding.addToCartButton.setOnClickListener {
+                pQty = 0
                 binding.addToCartButton.visibility = View.GONE
                 binding.quantityLinearLayout.visibility = View.VISIBLE
             }
 
-            binding.minusQuantityButton.setOnClickListener {
-
-                binding.addToCartButton.visibility = View.VISIBLE
-                binding.quantityLinearLayout.visibility = View.GONE
-            }
+//            binding.minusQuantityButton.setOnClickListener {
+//
+//                binding.addToCartButton.visibility = View.VISIBLE
+//                binding.quantityLinearLayout.visibility = View.GONE
+//            }
 
             //Increase quantity
             binding.addQuantityButton.setOnClickListener {
                 viewModel.addQuantity()
+                pQty += 1
+                binding.productQtyTv.setText(pQty.toString())
+                viewModel.addItemToCart(
+                    DatabaseCart(
+                        domainDummyProduct.id,
+                        domainDummyProduct.name,
+                        domainDummyProduct.regularPrice,
+                        domainDummyProduct.salePrice,
+                        domainDummyProduct.images[0].src,
+                        pQty
+                    )
+                )
+                onProductItemClickListener.onProductItemClick(adapterPosition, 1)
             }
 
             //Decrease quantity
             binding.minusQuantityButton.setOnClickListener {
-                if (qty>1) {
+
+                if (pQty > 1) {
+                    pQty -= 1
+                    binding.productQtyTv.setText(pQty.toString())
                     viewModel.minusQuantity()
-                }else{
+                    viewModel.addItemToCart(
+                        DatabaseCart(
+                            domainDummyProduct.id,
+                            domainDummyProduct.name,
+                            domainDummyProduct.regularPrice,
+                            domainDummyProduct.salePrice,
+                            domainDummyProduct.images[0].src,
+                            pQty
+                        )
+                    )
+                } else {
                     viewModel.minusQuantity()
+                    viewModel.removeItemFromCart(
+                        DatabaseCart(
+                            domainDummyProduct.id,
+                            domainDummyProduct.name,
+                            domainDummyProduct.regularPrice,
+                            domainDummyProduct.salePrice,
+                            domainDummyProduct.images[0].src,
+                            pQty
+                        )
+                    )
                     binding.quantityLinearLayout.visibility = View.GONE
                     binding.addToCartButton.visibility = View.VISIBLE
                 }
+                onProductMinusClickListener.onProductMinusClick(adapterPosition,1)
             }
 
             viewModel.productQtyLiveData.observe(viewLifeCycleOwner, Observer {
                 it?.let {
                     qty = it
-                    Timber.e("Product quantity: $qty")
-                    binding.productQtyTv.text = it.toString()
+//                    binding.productQtyTv.text = it.toString()
                 }
             })
 
@@ -88,6 +150,10 @@ class ProductListAdapter(
                 return ProductListViewHolder(binding)
             }
         }
+
+        override fun onClick(v: View?) {
+            binding.root.setOnClickListener(this)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductListViewHolder {
@@ -100,21 +166,20 @@ class ProductListAdapter(
         viewModel = ViewModelProvider(owner).get(ProductListViewModel::class.java)
         val product = getItem(position)
         product?.let {
-            holder.bind(it, lifecycleOwner)
-            Timber.e("Product name: ${it.productName}")
+            holder.bind(it, lifecycleOwner,onProductItemClickListener, onProductMinusClickListener)
         } ?: let {
             Timber.e("Product is empty")
         }
     }
 }
 
-class ProductListDiffUtilCallBack : DiffUtil.ItemCallback<DomainDummyProduct>() {
-    override fun areItemsTheSame(oldItem: DomainDummyProduct, newItem: DomainDummyProduct): Boolean {
+class ProductListDiffUtilCallBack : DiffUtil.ItemCallback<DomainProduct>() {
+    override fun areItemsTheSame(oldItem: DomainProduct, newItem: DomainProduct): Boolean {
         return oldItem === newItem
     }
 
-    override fun areContentsTheSame(oldItem: DomainDummyProduct, newItem: DomainDummyProduct): Boolean {
-        return oldItem.productId == newItem.productId
+    override fun areContentsTheSame(oldItem: DomainProduct, newItem: DomainProduct): Boolean {
+        return oldItem.id == newItem.id
     }
 
 }

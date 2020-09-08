@@ -97,11 +97,6 @@ class ProfileFragment : Fragment() {
             goToSplash()
         }
 
-//        //Set onClickListener to delivery card
-//        profileFragmentBinding.profileAddressCard.setOnClickListener {
-//
-//            profileViewModel.resetLoadingData()
-//        }
         return profileFragmentBinding.root
     }
 

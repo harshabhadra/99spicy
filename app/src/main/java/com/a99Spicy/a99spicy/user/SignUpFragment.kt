@@ -165,6 +165,7 @@ class SignUpFragment : Fragment() {
 
         }
 
+        //Set onClickListener to create account button
         signUpFragmentBinding.createAccountButton.setOnClickListener {
 
             loadingDialog = createLoadingDialog()
@@ -181,13 +182,32 @@ class SignUpFragment : Fragment() {
         //Observe create user live data
         viewModel.createUserLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {
-                loadingDialog.dismiss()
+
                 Timber.e("user id: ${it.data.userId}")
                 Toast.makeText(requireContext(), "Account Created Successfully", Toast.LENGTH_SHORT)
                     .show()
-                findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToLoginFragment())
+                findNavController().navigate(
+                    SignUpFragmentDirections.actionSignUpFragmentToLocationFragment(
+                        it.data.userId, name, phoneNumber
+                    )
+                )
             }
+        })
 
+        //Observe Loading value from ViewModel
+        viewModel.signUpLoadingLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (it == SignUpLoading.SIGNUP_FAILED) {
+                    loadingDialog.dismiss()
+                    Toast.makeText(
+                        requireContext(),
+                        "Failed to Create Account, Try again",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }else if (it == SignUpLoading.SIGNUP_SUCCESS){
+                    loadingDialog.dismiss()
+                }
+            }
         })
 
         return signUpFragmentBinding.root

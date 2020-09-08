@@ -55,6 +55,22 @@ class DeliveryAddressFragment : Fragment() {
         }
         sender = arguments.sender
 
+        if (sender == getString(R.string.title_profile) && address != ""){
+            viewModel.addAddress(
+                DatabaseShipping(
+                    firstName = shipping!!.firstName,
+                    lastName = "",
+                    company = "",
+                    address1 = address,
+                    address2 = "",
+                    city = shipping!!.city,
+                    postcode = shipping!!.postcode,
+                    country = "India",
+                    state = shipping!!.state
+                )
+            )
+        }
+
         //Setting up address recyclerView
         addressListAdapter = AddressListAdapter(AddressItemClickListener {
             viewModel.removeAddress(
@@ -138,6 +154,7 @@ class DeliveryAddressFragment : Fragment() {
                 loadingDialog.dismiss()
             }
         })
+
         //Set onClickListener to add button
         deliveryAddressBinding.addAddressButton.setOnClickListener {
             findNavController().navigate(

@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.databinding.FragmentLoginBinding
+import com.a99Spicy.a99spicy.network.Profile
 import com.a99Spicy.a99spicy.ui.HomeActivity
 import com.a99Spicy.a99spicy.utils.Constants
 import com.google.android.material.button.MaterialButton
@@ -37,7 +38,7 @@ class LoginFragment : Fragment() {
 
     private lateinit var otp: String
     private lateinit var phoneNumber: String
-    private lateinit var userId:String
+    private var userId: String = ""
 
     private lateinit var otpDialog: AlertDialog
     private lateinit var otpView: OtpView
@@ -134,8 +135,7 @@ class LoginFragment : Fragment() {
         viewModel.loginLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {
                 userId = it.data.userId
-                Toast.makeText(requireContext(),"Log in Successful", Toast.LENGTH_SHORT).show()
-                loadingDialog.dismiss()
+                Toast.makeText(requireContext(), "Log in Successful", Toast.LENGTH_SHORT).show()
                 val sharedPreferences = requireActivity().getSharedPreferences(
                     Constants.LOG_IN,
                     Context.MODE_PRIVATE
@@ -145,7 +145,23 @@ class LoginFragment : Fragment() {
                 editor.putString(Constants.SAVED_USER_ID, userId)
                 editor.putString(Constants.PHONE, phoneNumber)
                 editor.apply()
-                goToHome(userId)
+                goToHome(userId, null)
+            }
+        })
+
+        //Observe loading value from ViewModel
+        viewModel.loginLoadingLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (it == LoginLoading.LOGIN_SUCCESS) {
+                    loadingDialog.dismiss()
+                } else if (it == LoginLoading.LOGIN_FAILED) {
+                    loadingDialog.dismiss()
+                    Toast.makeText(
+                        requireContext(),
+                        "Failed to Log in, Try again",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         })
         return loginFragmentLoginBinding.root
@@ -241,9 +257,10 @@ class LoginFragment : Fragment() {
         return dialog
     }
 
-    private fun goToHome(userId:String) {
+    private fun goToHome(userId: String, profile: Profile?) {
         val intent = Intent(requireActivity(), HomeActivity::class.java)
         intent.putExtra(Constants.USER_ID, userId)
+        intent.putExtra(Constants.PROFILE, profile)
         startActivity(intent)
         requireActivity().finish()
     }

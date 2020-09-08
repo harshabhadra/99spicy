@@ -123,7 +123,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/default_address_textView"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:fontFamily="@font/fredoka_one"

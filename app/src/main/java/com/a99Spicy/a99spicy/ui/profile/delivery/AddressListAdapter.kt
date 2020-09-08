@@ -1,6 +1,7 @@
 package com.a99Spicy.a99spicy.ui.profile.delivery
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -15,9 +16,16 @@ class AddressListAdapter(private val clickListener: AddressItemClickListener) : 
     class AddressListViewHolder(private val binding: AddressListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(deliveryAddress: DeliveryAddress, clickListener: AddressItemClickListener) {
+        fun bind(deliveryAddress: DeliveryAddress, clickListener: AddressItemClickListener, position: Int) {
             binding.address = deliveryAddress
-            binding.clickListener = clickListener
+            if (position == 0){
+                binding.defaultAddressTextView.visibility = View.VISIBLE
+                binding.setAsDefaultTextView.visibility = View.INVISIBLE
+            }else{
+                binding.clickListener = clickListener
+                binding.defaultAddressTextView.visibility = View.GONE
+                binding.setAsDefaultTextView.visibility = View.VISIBLE
+            }
             binding.executePendingBindings()
         }
 
@@ -40,7 +48,7 @@ class AddressListAdapter(private val clickListener: AddressItemClickListener) : 
 
         val address = getItem(position)
         address?.let {
-            holder.bind(address, clickListener)
+            holder.bind(address, clickListener, position)
         }
     }
 }

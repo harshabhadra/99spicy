@@ -12,6 +12,7 @@ import com.a99Spicy.a99spicy.MyApplication
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.databinding.FragmentHomeBinding
 import com.a99Spicy.a99spicy.domain.*
+import com.a99Spicy.a99spicy.network.Profile
 import com.a99Spicy.a99spicy.network.Shipping
 import com.a99Spicy.a99spicy.ui.HomeActivity
 import com.a99Spicy.a99spicy.utils.AppUtils
@@ -29,10 +30,10 @@ class HomeFragment : Fragment() {
     private var catList: MutableList<DomainCategoryItem> = mutableListOf()
     private var subCategoryList: MutableSet<DomainCategoryItem> = mutableSetOf()
     private lateinit var loadingDialog: AlertDialog
-    private var locationDetails: LocationDetails? = null
     private lateinit var userId: String
     private var shipping: Shipping? = null
     private lateinit var productList: List<DomainProduct>
+    private var profile: Profile? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,13 +60,22 @@ class HomeFragment : Fragment() {
             )
         )
         userId = activity.getUserId()
+        profile = activity.getProfile()
 
         //Getting user profile
-        if (userId.isNotEmpty()) {
-            loadingDialog = createLoadingDialog()
-            loadingDialog.show()
-            homeViewModel.getProfile(userId)
+        profile?.let {
+            shipping = it.shipping
+            if (shipping?.address1!!.isNotEmpty() || shipping?.address1 != "") {
+                homeFragmentBinding.homeDeliveryLocationTextView.text = "${shipping?.postcode} ${shipping?.city}"
+            }
+        }?:let {
+            if (userId.isNotEmpty()) {
+                loadingDialog = createLoadingDialog()
+                loadingDialog.show()
+                homeViewModel.getProfile(userId)
+            }
         }
+
         //Setting up HomeSlider
         val homeSliderAdapter = HomeSliderAdapter(AppUtils.getBannerList())
         homeFragmentBinding.homeSlider.setSliderAdapter(homeSliderAdapter)

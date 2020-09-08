@@ -77,4 +77,6 @@
     <string name="address_book">Address Book</string>
     <string name="set_as_default">Set as Default</string>
     <string name="zero">0</string>
+    <string name="app_tag">Best Online Grocery Store</string>
+    <string name="newly_arrival">New Arrival</string>
 </resources>

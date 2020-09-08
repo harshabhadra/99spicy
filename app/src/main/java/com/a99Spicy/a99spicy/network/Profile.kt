@@ -85,9 +85,9 @@ data class Address(
 @Parcelize
 data class ShippingDetail(
     @JsonClass(generateAdapter = true)
-    var firstName: String,
+    var first_name: String,
     @JsonClass(generateAdapter = true)
-    var lastName: String,
+    var last_name: String,
     @JsonClass(generateAdapter = true)
     var company: String,
     @JsonClass(generateAdapter = true)

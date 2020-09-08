@@ -26,6 +26,7 @@ import androidx.navigation.ui.NavigationUI
 import com.a99Spicy.a99spicy.BuildConfig
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.domain.LocationDetails
+import com.a99Spicy.a99spicy.network.Profile
 import com.a99Spicy.a99spicy.utils.Constants
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -38,6 +39,7 @@ private lateinit var toolbar: Toolbar
 private lateinit var userId: String
 
 private var locationDetails: LocationDetails? = null
+private var profile:Profile? = null
 
 class HomeActivity : AppCompatActivity() {
     companion object {
@@ -57,6 +59,7 @@ class HomeActivity : AppCompatActivity() {
         val intent = intent
         intent?.let {
             userId = intent.getStringExtra(Constants.USER_ID)!!
+            profile = intent.getParcelableExtra(Constants.PROFILE)
             Toast.makeText(applicationContext, "user id: $userId", Toast.LENGTH_SHORT).show()
         }
 
@@ -254,5 +257,9 @@ class HomeActivity : AppCompatActivity() {
 
     fun getUserId(): String {
         return userId
+    }
+
+    fun getProfile():Profile?{
+        return profile
     }
 }

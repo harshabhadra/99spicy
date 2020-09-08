@@ -26,18 +26,12 @@ class ProfileViewModel : ViewModel() {
     val profileLiveData: LiveData<Profile>
         get() = _profileMutableLiveData
 
-    //Store address data
-    private var _addressMutableLiveData = MutableLiveData<Profile>()
-    val addressLiveData: LiveData<Profile>
-        get() = _addressMutableLiveData
-
     private var _loadingMutableLiveData = MutableLiveData<Loading>()
     val loadingLiveData:LiveData<Loading>
     get() = _loadingMutableLiveData
 
     init {
         _profileMutableLiveData.value = null
-        _addressMutableLiveData.value = null
         _loadingMutableLiveData.value = null
     }
 
@@ -55,19 +49,6 @@ class ProfileViewModel : ViewModel() {
                 Timber.e("Failed to get user profile: ${e.message}")
                 _profileMutableLiveData.value = null
                 _loadingMutableLiveData.value = Loading.FAILED
-            }
-        }
-    }
-
-    fun setAddress(id: Int, shipping: Address) {
-        uiScope.launch {
-            val addressDeferred = apiService.setDeliveryAddressAsync(id.toString(), shipping)
-            try {
-                val response = addressDeferred.await()
-                _addressMutableLiveData.value = response
-                Timber.e("Address saved response received successfully: ${response.shipping.firstName}")
-            } catch (e: Exception) {
-                Timber.e("Failed to update address: ${e.message}")
             }
         }
     }

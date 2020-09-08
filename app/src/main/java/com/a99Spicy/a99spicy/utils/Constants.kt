@@ -15,6 +15,7 @@ class Constants {
         const val ORDER = "order"
         const val MESSAGE = "message"
         const val IS_FIRST = "is_first"
+        const val PROFILE = "profile"
 
         const val PLACE_ORDER_REQUEST_CODE = 1002
         const val ADD_TO_WALLET_REQUEST_CODE = 1003

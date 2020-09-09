@@ -11,6 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.a99Spicy.a99spicy.MyApplication
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.database.DatabaseCart
@@ -28,6 +31,7 @@ import com.a99Spicy.a99spicy.ui.profile.Loading
 import com.a99Spicy.a99spicy.utils.AppUtils
 import com.a99Spicy.a99spicy.utils.Constants
 import timber.log.Timber
+
 
 class CartFragment : Fragment(), PaymentMethodFragment.OnPaymentMethodClickListener,
     OrderFragment.OnOrderCompleteListener {
@@ -69,7 +73,8 @@ class CartFragment : Fragment(), PaymentMethodFragment.OnPaymentMethodClickListe
         viewModel.profileLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {
                 shipping = it.shipping
-                cartFragmentBinding.deliveryLocationTextView.text = "${shipping.postcode} ${shipping.city}"
+                cartFragmentBinding.deliveryLocationTextView.text =
+                    "${shipping.postcode} ${shipping.city}"
             }
         })
 
@@ -81,29 +86,34 @@ class CartFragment : Fragment(), PaymentMethodFragment.OnPaymentMethodClickListe
             }
         })
 
+        cartFragmentBinding.cartRecyclerView.itemAnimator = null
         //Setting up cart recyclerView
         cartListAdapter = CartListAdapter(CartListItemClickListener {
-            viewModel.removeItemFromCart(it)
-            cartList.remove(it)
-            cartListAdapter.submitList(cartList.toList())
-            cartListAdapter.notifyDataSetChanged()
-        })
+        }, this, viewLifecycleOwner)
         cartFragmentBinding.cartRecyclerView.adapter = cartListAdapter
+
 
         //Observing Cart Items
         viewModel.cartItemsLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {
-                cartList.addAll(it)
-                for (item in it) {
-                    Timber.e("name ${item.name}, quantity: ${item.quantity}")
-                    item.salePrice?.let { itemPrice ->
-                        if (itemPrice.isNotEmpty()) {
-                            totalAmount += itemPrice.toDouble().times(item.quantity)
+                if (it.isNotEmpty()) {
+                    cartFragmentBinding.cartEmptyTextView.visibility = View.GONE
+                    cartList.addAll(it)
+                    for (item in it) {
+                        Timber.e("name ${item.name}, quantity: ${item.quantity}")
+                        item.salePrice?.let { itemPrice ->
+                            if (itemPrice.isNotEmpty()) {
+                                totalAmount += itemPrice.toDouble().times(item.quantity)
+                            }
                         }
                     }
+                    cartFragmentBinding.cartTotalAmountTextView.text =
+                        totalAmount.toString() + " Rs/-"
+                    cartListAdapter.submitList(it)
+                } else {
+                    cartListAdapter.submitList(it)
+                    cartFragmentBinding.cartEmptyTextView.visibility = View.VISIBLE
                 }
-                cartFragmentBinding.cartTotalAmountTextView.text = totalAmount.toString() + " Rs/-"
-                cartListAdapter.submitList(cartList.toList())
             }
         })
 
@@ -124,8 +134,9 @@ class CartFragment : Fragment(), PaymentMethodFragment.OnPaymentMethodClickListe
                 if (walletBalance.toDouble() > 1.00) {
                     viewModel.cdWallet(userId, WalletRequest("debit", 1.00, "checkout"))
                     viewModel.resetWalletBalance()
-                }else{
-                    Toast.makeText(requireContext(),"Add money to Wallet", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(requireContext(), "Add money to Wallet", Toast.LENGTH_LONG)
+                        .show()
                 }
             }
         })

@@ -19,8 +19,6 @@ import com.squareup.picasso.Picasso
 import timber.log.Timber
 
 private lateinit var viewModel: ProductListViewModel
-private var qty = 0
-private var pQty = 0
 
 class ProductListAdapter(
     private val owner: ViewModelStoreOwner,
@@ -63,23 +61,12 @@ class ProductListAdapter(
 //                binding.productPriceTextView.text = "$pActualPrice Rs/-"
 //                binding.savingTextView.text = "Your Save ${save} Rs/-"
 //            }
-            binding.addToCartButton.setOnClickListener {
-                pQty = 0
-                binding.addToCartButton.visibility = View.GONE
-                binding.quantityLinearLayout.visibility = View.VISIBLE
-            }
 
-//            binding.minusQuantityButton.setOnClickListener {
-//
-//                binding.addToCartButton.visibility = View.VISIBLE
-//                binding.quantityLinearLayout.visibility = View.GONE
-//            }
+            var pQty = 0
 
             //Increase quantity
             binding.addQuantityButton.setOnClickListener {
-                viewModel.addQuantity()
-                pQty += 1
-                binding.productQtyTv.setText(pQty.toString())
+                pQty ++
                 viewModel.addItemToCart(
                     DatabaseCart(
                         domainDummyProduct.id,
@@ -90,6 +77,7 @@ class ProductListAdapter(
                         pQty
                     )
                 )
+                binding.productQtyTv.text = pQty.toString()
                 onProductItemClickListener.onProductItemClick(adapterPosition, 1)
             }
 
@@ -97,9 +85,7 @@ class ProductListAdapter(
             binding.minusQuantityButton.setOnClickListener {
 
                 if (pQty > 1) {
-                    pQty -= 1
-                    binding.productQtyTv.setText(pQty.toString())
-                    viewModel.minusQuantity()
+                    pQty --
                     viewModel.addItemToCart(
                         DatabaseCart(
                             domainDummyProduct.id,
@@ -110,8 +96,8 @@ class ProductListAdapter(
                             pQty
                         )
                     )
+                    binding.productQtyTv.setText(pQty.toString())
                 } else {
-                    viewModel.minusQuantity()
                     viewModel.removeItemFromCart(
                         DatabaseCart(
                             domainDummyProduct.id,
@@ -122,18 +108,9 @@ class ProductListAdapter(
                             pQty
                         )
                     )
-                    binding.quantityLinearLayout.visibility = View.GONE
-                    binding.addToCartButton.visibility = View.VISIBLE
                 }
                 onProductMinusClickListener.onProductMinusClick(adapterPosition,1)
             }
-
-            viewModel.productQtyLiveData.observe(viewLifeCycleOwner, Observer {
-                it?.let {
-                    qty = it
-//                    binding.productQtyTv.text = it.toString()
-                }
-            })
 
             binding.executePendingBindings()
         }

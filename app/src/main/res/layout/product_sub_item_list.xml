@@ -65,19 +65,6 @@
             tools:text="@string/_99_00_rs" />
 
         <Button
-            android:id="@+id/add_to_cart_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:drawableEnd="@drawable/ic_baseline_add_24"
-            android:drawablePadding="8dp"
-            android:text="@string/add"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/product_discount_textView"
-            app:layout_constraintTop_toBottomOf="@+id/saving_textView" />
-
-        <Button
             android:id="@+id/subscribe_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -137,11 +124,9 @@
             android:id="@+id/quantity_linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:visibility="gone"
             android:background="@android:color/white"
             app:layout_constraintBottom_toBottomOf="@+id/subscribe_button"
-            app:layout_constraintEnd_toStartOf="@+id/add_to_cart_button"
+            app:layout_constraintEnd_toEndOf="@+id/saving_textView"
             app:layout_constraintTop_toTopOf="@+id/subscribe_button">
 
             <ImageButton
@@ -155,10 +140,10 @@
                 android:id="@+id/product_qty_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:padding="4dp"
-                android:text="@string/zero"
                 android:fontFamily="@font/open_sans"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:padding="4dp"
+                android:text="@string/zero" />
 
             <ImageButton
                 android:id="@+id/add_quantity_button"

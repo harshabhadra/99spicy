@@ -183,7 +183,7 @@ class LocationFragment : Fragment() {
 
     private fun createLoadingDialog(): AlertDialog {
         val layout = LayoutInflater.from(requireContext()).inflate(R.layout.loading_layout, null)
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireContext(),R.style.TransparentDialog)
         builder.setView(layout)
         builder.setCancelable(false)
         return builder.create()

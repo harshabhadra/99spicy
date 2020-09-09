@@ -12,6 +12,9 @@ interface CartDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addItemToCart(databaseCart: DatabaseCart)
 
+    @Update
+    fun updateItem(databaseCart: DatabaseCart)
+
     @Delete
     fun deleteCartItem(databaseCart: DatabaseCart)
 }

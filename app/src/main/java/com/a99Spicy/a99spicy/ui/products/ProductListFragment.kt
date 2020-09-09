@@ -1,11 +1,10 @@
 package com.a99Spicy.a99spicy.ui.products
 
+import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
+import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,8 +14,8 @@ import com.a99Spicy.a99spicy.MyApplication
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.databinding.ProductListFragmentBinding
 import com.a99Spicy.a99spicy.domain.DomainProduct
-import com.a99Spicy.a99spicy.domain.DomainProducts
 import com.a99Spicy.a99spicy.ui.HomeActivity
+import com.a99Spicy.a99spicy.utils.CountDrawable
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import timber.log.Timber
@@ -29,6 +28,7 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
 
     private lateinit var productList: List<DomainProduct>
     private var qty = 0
+    private var cartCount:String = "5"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,6 +82,13 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
             }
         })
 
+        //Observe cart items liveData
+        viewModel.cartItemsLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                cartCount = it.size.toString()
+                Timber.e("Cart items: $cartCount")
+            }
+        })
         TabLayoutMediator(productListFragmentBinding.categoryTabLayout,
             productListFragmentBinding.categoryViewPager,
             TabLayoutMediator.TabConfigurationStrategy { tab, position ->
@@ -90,23 +97,28 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
                     tab.text = catList[position].catName
                 }
             }).attach()
+
+        setHasOptionsMenu(true)
         return productListFragmentBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.product_menu, menu)
     }
 
-    private fun createLoadingDialog(): AlertDialog {
-        val layout = LayoutInflater.from(requireContext()).inflate(R.layout.loading_layout, null)
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setView(layout)
-        builder.setCancelable(false)
-        return builder.create()
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        setCount(requireContext(), cartCount, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_product_cart) {
+            findNavController().
+            navigate(ProductListFragmentDirections.actionProductListFragmentToCartFragment())
+        }
+        return true
     }
 
     override fun onProductItemClick(position: Int, quantity: Int) {
-        qty += quantity
         val snackBar = Snackbar.make(
             productListFragmentBinding.productRootLayout,
             "Cart Updated",
@@ -126,10 +138,9 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
     }
 
     override fun onProductMinusClick(position: Int, quantity: Int) {
-        qty -= quantity
         val snackBar = Snackbar.make(
             productListFragmentBinding.productRootLayout,
-            "$qty Items",
+            "Cart Updated",
             Snackbar.LENGTH_INDEFINITE
         )
         snackBar.setAction("Order Now", View.OnClickListener {
@@ -138,13 +149,14 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
                     .actionProductListFragmentToCartFragment()
             )
         })
-        snackBar.animationMode = Snackbar.ANIMATION_MODE_SLIDE
+        snackBar.animationMode = Snackbar.ANIMATION_MODE_FADE
         snackBar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
         snackBar.setTextColor(Color.WHITE)
         snackBar.setActionTextColor(Color.WHITE)
         snackBar.show()
     }
 
+    //Get products by category
     private fun getProductsByCategory(catId: Int) {
         val (match, rest) = productList.partition {
             it.categories[0].id == catId || it.categories[1].id == catId
@@ -153,5 +165,22 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
         if (match.isNotEmpty()) {
             viewModel.setCategoryProductList(match)
         }
+    }
+
+    private fun setCount(context: Context, count: String, menu: Menu) {
+        val menuItem: MenuItem = menu.findItem(R.id.action_product_cart)
+        val icon = menuItem.icon as LayerDrawable
+        val badge: CountDrawable
+
+        // Reuse drawable if possible
+        val reuse = icon.findDrawableByLayerId(R.id.ic_group_count)
+        badge = if (reuse != null && reuse is CountDrawable) {
+            reuse
+        } else {
+            CountDrawable(context)
+        }
+        badge.setCount(count)
+        icon.mutate()
+        icon.setDrawableByLayerId(R.id.ic_group_count, badge)
     }
 }

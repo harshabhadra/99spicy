@@ -21,7 +21,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
-import java.lang.IllegalArgumentException
 
 enum class Loading {
     SUCCESS, FAILED, PENDING
@@ -45,7 +44,7 @@ class CartViewModel(application: MyApplication) : ViewModel() {
         get() = _profileMutableLiveData
 
     private var _loadingMutableLiveData = MutableLiveData<Loading>()
-    val loadingLiveData:LiveData<Loading>
+    val loadingLiveData: LiveData<Loading>
         get() = _loadingMutableLiveData
 
     private var _walletBalanceMutableLiveData = MutableLiveData<String>()
@@ -115,21 +114,32 @@ class CartViewModel(application: MyApplication) : ViewModel() {
         }
     }
 
-    fun resetWallet(){
+    fun resetWallet() {
         _walletResponseMutableLiveData.value = null
     }
-    fun resetWalletBalance(){
+
+    fun resetWalletBalance() {
         _walletBalanceMutableLiveData.value = null
     }
-    fun addItemToCart(databaseCart: DatabaseCart){
+
+    //Add item to cart
+    fun addItemToCart(databaseCart: DatabaseCart) {
         uiScope.launch {
             repository.addToCart(databaseCart)
         }
     }
 
-    fun removeItemFromCart(databaseCart: DatabaseCart){
+    //Remove item from cart
+    fun removeItemFromCart(databaseCart: DatabaseCart) {
         uiScope.launch {
             repository.deleteCart(databaseCart)
+        }
+    }
+
+    //Update cart item
+    fun updateCartItem(databaseCart: DatabaseCart) {
+        uiScope.launch {
+            repository.updateCartItem(databaseCart)
         }
     }
 
@@ -139,9 +149,9 @@ class CartViewModel(application: MyApplication) : ViewModel() {
     }
 }
 
-class CartViewModelFactory(private val application: MyApplication):ViewModelProvider.Factory{
+class CartViewModelFactory(private val application: MyApplication) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(CartViewModel::class.java)){
+        if (modelClass.isAssignableFrom(CartViewModel::class.java)) {
             return CartViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

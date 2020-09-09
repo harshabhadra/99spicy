@@ -56,6 +56,13 @@ class Repository(val database: MyDatabase) {
         }
     }
 
+    //Update cart item
+    suspend fun updateCartItem(databaseCart: DatabaseCart){
+        withContext(Dispatchers.IO){
+            database.cartDao.updateItem(databaseCart)
+        }
+    }
+
     //Add delivery address
     suspend fun addAddress(databaseShipping: DatabaseShipping){
         withContext(Dispatchers.IO){
@@ -112,7 +119,6 @@ class Repository(val database: MyDatabase) {
                         pageC = 1
                     }
                     catList.addAll(categories)
-//                    database.categoryDao.deleteAllCategories()
                     database.categoryDao.insertCategory(*catList.asDataBaseProductCategoryList())
                 } catch (e: Exception) {
                     Timber.e("Failed to get categories: ${e.message}")

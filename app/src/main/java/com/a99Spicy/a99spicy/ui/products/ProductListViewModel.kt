@@ -52,8 +52,6 @@ class ProductListViewModel(application: MyApplication) : ViewModel() {
 
     val cartItemsLiveData = repository.cartItemsList
 
-    val productListLiveData = repository.productList
-
     init {
         _productsByCatMutableLiveData.value = null
         _productQtyMutableLiveData.value = 0
@@ -71,45 +69,6 @@ class ProductListViewModel(application: MyApplication) : ViewModel() {
             repository.deleteCart(databaseCart)
         }
     }
-
-    fun getProductsByCat(catid: Int) {
-        uiScope.launch {
-            if (!endProducts) {
-                val productsDeferred =
-                    apiService.getProductsByCatAsync(catid.toString(), page, 100)
-                try {
-                    val productResponse = productsDeferred.await()
-                    val products = productResponse.asDataBaseProducts().toList()
-                    productList.addAll(products.asDomainProductList())
-                    if (products.isNotEmpty()) {
-                        page++
-                        endProducts = false
-                    } else {
-                        page = 1
-                        endProducts = true
-                    }
-                    _productsByCatMutableLiveData.value = products.asDomainProductList()
-                } catch (e: Exception) {
-                    Timber.e("Failed to get products by cat: ${e.message}")
-                }
-            }
-        }
-    }
-
-//    fun getProductByCategory(catid: Int, productsList: List<DomainProduct>) {
-//        Timber.e("cat id: $catid \n products: ${productsList.size}")
-//        for (product in productsList) {
-//            val catList = product.categories
-//            for (cat in catList) {
-//                if (catid == cat.id) {
-//                    Timber.e("product name: ${product.name}")
-//                    pList.add(product)
-//                    Timber.e("products in viewmodel list: ${pList.size}")
-//                }
-//            }
-//        }
-//        _productsByCategoryMutableLiveData.value = pList
-//    }
 
     fun setCategoryProductList(mProductList:List<DomainProduct>){
         Timber.e("product List size in viewModel: ${mProductList.size}")

@@ -6,6 +6,6 @@
     <color name="colorPrimaryLight">#757de8</color>
     <color name="colorProfileBack">#e0e0e0</color>
     <color name="colorGreen">#009624</color>
-
+    <color name="colorRed">#FF0000</color>
     <color name="black_overlay">#66000000</color>
 </resources>

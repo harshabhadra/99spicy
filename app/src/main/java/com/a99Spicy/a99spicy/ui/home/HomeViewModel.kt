@@ -63,7 +63,12 @@ class HomeViewModel(application: MyApplication) : ViewModel() {
     //Getting all categories
     val categoriesLiveData = repository.categoryList
 
+    //Get product list
     val productListLiveData = repository.productList
+
+    //Get cart items
+    val cartItemListLiveData = repository.cartItemsList
+
     //Get user profile
     fun getProfile(userId: String) {
         uiScope.launch {

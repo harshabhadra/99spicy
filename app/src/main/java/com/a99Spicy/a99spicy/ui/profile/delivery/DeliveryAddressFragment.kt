@@ -97,51 +97,6 @@ class DeliveryAddressFragment : Fragment() {
                 if (it.isNotEmpty()) {
                     deliveryAddressBinding.noAddressTextView.visibility = View.GONE
                     addressListAdapter.submitList(it)
-                    if (sender == getString(R.string.title_home) || sender == getString(R.string.title_profile)) {
-                        if (address == "") {
-                            loadingDialog = createLoadingDialog()
-                            loadingDialog.show()
-                            val add = it[0]
-                            viewModel.setAddress(
-                                userId.toInt(),
-                                Address(
-                                    ShippingDetail(
-                                        add.firstName,
-                                        add.lastName,
-                                        add.company,
-                                        add.address1,
-                                        add.address2,
-                                        add.city,
-                                        add.postcode,
-                                        add.country,
-                                        add.state
-                                    )
-                                )
-                            )
-                        }
-                    } else if (sender == getString(R.string.delivery_add)) {
-                        if (shipping == null && it.size == 1) {
-                            val add = it[0]
-                            loadingDialog = createLoadingDialog()
-                            loadingDialog.show()
-                            viewModel.setAddress(
-                                userId.toInt(),
-                                Address(
-                                    ShippingDetail(
-                                        add.firstName,
-                                        add.lastName,
-                                        add.company,
-                                        add.address1,
-                                        add.address2,
-                                        add.city,
-                                        add.postcode,
-                                        add.country,
-                                        add.state
-                                    )
-                                )
-                            )
-                        }
-                    }
                 }else{
                     deliveryAddressBinding.noAddressTextView.visibility = View.VISIBLE
                 }

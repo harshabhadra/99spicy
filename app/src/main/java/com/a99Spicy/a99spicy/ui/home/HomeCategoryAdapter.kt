@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.databinding.CategoryListItemBinding
 import com.a99Spicy.a99spicy.domain.DomainCategoryItem
+import com.a99Spicy.a99spicy.utils.AppUtils
 import com.bumptech.glide.Glide
 import timber.log.Timber
 
@@ -31,6 +32,7 @@ ListAdapter<DomainCategoryItem,HomeCategoryAdapter.HomeCategoryViewHolder>(HomeC
                     .centerCrop()
                     .into(binding.categoryImage)
             }
+            binding.categoryItemRootLayout.setBackgroundColor(AppUtils.getRandomColor())
             binding.executePendingBindings()
         }
 

@@ -6,86 +6,96 @@
     <data>
 
     </data>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".ui.home.HomeFragment">
+
+        <View
+            android:id="@+id/view5"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dimen_1dp"
+            android:background="#eeeeee"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_delivery_location_textView" />
+
+        <TextView
+            android:id="@+id/home_delivery_location_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:drawableStart="@drawable/ic_baseline_location_on_24"
+            android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
+            android:drawablePadding="16dp"
+            android:fontFamily="@font/open_sans_semibold"
+            android:padding="8dp"
+            android:text="@string/set_your_delivery_address"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
+
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/shop_by_category"
+            app:layout_constraintEnd_toEndOf="@+id/home_slider_card"
+            app:layout_constraintStart_toStartOf="@+id/home_slider_card"
+            app:layout_constraintTop_toBottomOf="@+id/home_slider_card" />
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/search_product_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/search_background"
+                android:drawableStart="@drawable/ic_baseline_search_24"
+                android:drawablePadding="16dp"
+                android:hint="@string/search_products"
+                android:padding="4dp"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/home_slider_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".ui.home.HomeFragment">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dimen_1dp"
-                android:background="#eeeeee"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_delivery_location_textView" />
-
-            <TextView
-                android:id="@+id/home_delivery_location_textView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:drawableStart="@drawable/ic_baseline_location_on_24"
-                android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
-                android:drawablePadding="16dp"
-                android:fontFamily="@font/open_sans_semibold"
-                android:padding="8dp"
-                android:text="@string/set_your_delivery_address"
-                android:textColor="@android:color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
-
-            <TextView
-                android:id="@+id/textView2"
-                style="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/montserrat"
-                android:text="@string/shop_by_category"
-                app:layout_constraintEnd_toEndOf="@+id/home_slider"
-                app:layout_constraintStart_toStartOf="@+id/home_slider"
-                app:layout_constraintTop_toBottomOf="@+id/home_slider" />
-
-            <FrameLayout
-                android:id="@+id/frameLayout"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <EditText
-                    android:id="@+id/search_product_EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/search_background"
-                    android:drawableStart="@drawable/ic_baseline_search_24"
-                    android:drawablePadding="16dp"
-                    android:hint="@string/search_products"
-                    android:padding="4dp"
-                    android:textSize="14sp" />
-            </FrameLayout>
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="@dimen/dimen_16dp"
+            app:cardElevation="@dimen/dimen_6dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_delivery_location_textView">
 
             <com.smarteist.autoimageslider.SliderView
                 android:id="@+id/home_slider"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_delivery_location_textView"
+                android:layout_height="200dp"
                 app:sliderAnimationDuration="600"
                 app:sliderAutoCycleDirection="back_and_forth"
                 app:sliderAutoCycleEnabled="true"
@@ -101,24 +111,50 @@
                 app:sliderStartAutoCycle="true">
 
             </com.smarteist.autoimageslider.SliderView>
+        </com.google.android.material.card.MaterialCardView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/category_RecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:spanCount="2"
+            tools:itemCount="4"
+            tools:listitem="@layout/category_list_item" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/category_RecyclerView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="64dp"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2"
-                app:spanCount="2"
-                tools:itemCount="4"
-                tools:listitem="@layout/category_list_item" />
+        <TextView
+            android:id="@+id/textView6"
+            style="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/newly_arrival"
+            app:layout_constraintStart_toStartOf="@+id/home_slider_card"
+            app:layout_constraintTop_toBottomOf="@+id/category_RecyclerView" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/new_arrival_recyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            tools:listitem="@layout/new_list_item"
+            android:layout_marginBottom="64dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

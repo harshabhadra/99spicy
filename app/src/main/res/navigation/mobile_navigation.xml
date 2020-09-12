@@ -61,6 +61,12 @@
         <argument
             android:name="products"
             app:argType="com.a99Spicy.a99spicy.domain.DomainProducts" />
+        <argument
+            android:name="profile"
+            app:argType="com.a99Spicy.a99spicy.network.Profile" />
+        <action
+            android:id="@+id/action_productListFragment_to_subscribeFragment"
+            app:destination="@id/subscribeFragment" />
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
@@ -72,6 +78,9 @@
         <action
             android:id="@+id/action_cartFragment_to_deliveryAddressFragment"
             app:destination="@id/deliveryAddressFragment" />
+        <argument
+            android:name="profile"
+            app:argType="com.a99Spicy.a99spicy.network.Profile" />
     </fragment>
     <fragment
         android:id="@+id/addressFragment"
@@ -119,5 +128,14 @@
         <argument
             android:name="sender"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/subscribeFragment"
+        android:name="com.a99Spicy.a99spicy.ui.subscriptions.SubscribeFragment"
+        android:label="subscribe_fragment"
+        tools:layout="@layout/subscribe_fragment" >
+        <argument
+            android:name="product"
+            app:argType="com.a99Spicy.a99spicy.domain.DomainProduct" />
     </fragment>
 </navigation>

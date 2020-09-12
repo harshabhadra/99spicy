@@ -14,6 +14,7 @@ import com.a99Spicy.a99spicy.domain.DomainProducts
 private val productList: MutableSet<DomainProduct> = mutableSetOf()
 
 class ProductCategoryAdapter(
+    private val catName:String,
     private val viewModelStoreOwner: ViewModelStoreOwner,
     private val viewLifecycleOwner: LifecycleOwner,
     private val onProductItemClickListener: ProductListAdapter.OnProductItemClickListener,
@@ -27,6 +28,7 @@ class ProductCategoryAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
+            catName: String,
             categoryItem: DomainProducts,
             viewModelStoreOwner: ViewModelStoreOwner,
             viewLifecycleOwner: LifecycleOwner,
@@ -35,7 +37,7 @@ class ProductCategoryAdapter(
         ) {
             productList.addAll(categoryItem.productList)
             if (productList.isNotEmpty()) {
-                val productListAdapter = ProductListAdapter(viewModelStoreOwner,
+                val productListAdapter = ProductListAdapter(catName, viewModelStoreOwner,
                     viewLifecycleOwner, onProductItemClickListener,onProductMinusClickListener)
                 binding.productListRecyclerView.adapter = productListAdapter
                 productListAdapter.submitList(categoryItem.productList.toList())
@@ -65,7 +67,7 @@ class ProductCategoryAdapter(
 
         val productCategory = getItem(position)
         productCategory?.let {
-            holder.bind(it, viewModelStoreOwner, viewLifecycleOwner,
+            holder.bind(catName, it, viewModelStoreOwner, viewLifecycleOwner,
                 onProductItemClickListener,onProductMinusClickListener)
         }
     }

@@ -7,6 +7,10 @@
 
     </data>
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -157,4 +161,18 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+        <com.andremion.counterfab.CounterFab
+            android:id="@+id/cart_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_shopping_cart_24"
+            android:layout_gravity="bottom|end"
+            app:fabSize="normal"
+            app:badgeBackgroundColor="@color/colorRed"
+            app:badgeTextColor="@color/white"
+            app:badgePosition="RightTop"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:layout_marginBottom="64dp"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.DiffUtil
@@ -19,8 +18,11 @@ import com.squareup.picasso.Picasso
 import timber.log.Timber
 
 private lateinit var viewModel: ProductListViewModel
+private var qty = 0
+private var pQty = 0
 
 class ProductListAdapter(
+    private val catName: String,
     private val owner: ViewModelStoreOwner,
     private val lifecycleOwner: LifecycleOwner,
     private val onProductItemClickListener: OnProductItemClickListener,
@@ -32,13 +34,15 @@ class ProductListAdapter(
         fun onProductItemClick(position: Int, quantity: Int)
     }
 
-    interface OnProductMinusClickListener{
-        fun onProductMinusClick(position: Int,quantity: Int)
+    interface OnProductMinusClickListener {
+        fun onProductMinusClick(position: Int, quantity: Int)
     }
+
     class ProductListViewHolder private constructor(val binding: ProductSubItemListBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         fun bind(
+            catName: String,
             domainDummyProduct: DomainProduct,
             viewLifeCycleOwner: LifecycleOwner,
             onProductItemClickListener: OnProductItemClickListener,
@@ -61,12 +65,15 @@ class ProductListAdapter(
 //                binding.productPriceTextView.text = "$pActualPrice Rs/-"
 //                binding.savingTextView.text = "Your Save ${save} Rs/-"
 //            }
-
-            var pQty = 0
+            binding.addToCartButton.setOnClickListener {
+                pQty = 0
+                binding.addToCartButton.visibility = View.GONE
+                binding.quantityLinearLayout.visibility = View.VISIBLE
+            }
 
             //Increase quantity
             binding.addQuantityButton.setOnClickListener {
-                pQty ++
+                pQty++
                 viewModel.addItemToCart(
                     DatabaseCart(
                         domainDummyProduct.id,
@@ -85,7 +92,7 @@ class ProductListAdapter(
             binding.minusQuantityButton.setOnClickListener {
 
                 if (pQty > 1) {
-                    pQty --
+                    pQty--
                     viewModel.addItemToCart(
                         DatabaseCart(
                             domainDummyProduct.id,
@@ -96,8 +103,9 @@ class ProductListAdapter(
                             pQty
                         )
                     )
-                    binding.productQtyTv.setText(pQty.toString())
-                } else {
+                    binding.productQtyTv.text = pQty.toString()
+                } else if (pQty == 1) {
+                    pQty--
                     viewModel.removeItemFromCart(
                         DatabaseCart(
                             domainDummyProduct.id,
@@ -108,10 +116,16 @@ class ProductListAdapter(
                             pQty
                         )
                     )
+                    binding.productQtyTv.text = pQty.toString()
                 }
-                onProductMinusClickListener.onProductMinusClick(adapterPosition,1)
+                onProductMinusClickListener.onProductMinusClick(adapterPosition, 1)
             }
 
+            if (catName == "Dairy and Bakery"){
+                binding.subscribeButton.visibility = View.VISIBLE
+            }else{
+                binding.subscribeButton.visibility = View.INVISIBLE
+            }
             binding.executePendingBindings()
         }
 
@@ -143,7 +157,13 @@ class ProductListAdapter(
         viewModel = ViewModelProvider(owner).get(ProductListViewModel::class.java)
         val product = getItem(position)
         product?.let {
-            holder.bind(it, lifecycleOwner,onProductItemClickListener, onProductMinusClickListener)
+            holder.bind(
+                catName,
+                it,
+                lifecycleOwner,
+                onProductItemClickListener,
+                onProductMinusClickListener
+            )
         } ?: let {
             Timber.e("Product is empty")
         }

@@ -19,10 +19,7 @@ import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.database.DatabaseCart
 import com.a99Spicy.a99spicy.database.asLineItems
 import com.a99Spicy.a99spicy.databinding.CartFragmentBinding
-import com.a99Spicy.a99spicy.network.OrderResponse
-import com.a99Spicy.a99spicy.network.PlaceOrder
-import com.a99Spicy.a99spicy.network.Shipping
-import com.a99Spicy.a99spicy.network.WalletRequest
+import com.a99Spicy.a99spicy.network.*
 import com.a99Spicy.a99spicy.ui.HomeActivity
 import com.a99Spicy.a99spicy.ui.order.OrderFragment
 import com.a99Spicy.a99spicy.ui.payment.PaymentActivity
@@ -46,52 +43,40 @@ class CartFragment : Fragment(), PaymentMethodFragment.OnPaymentMethodClickListe
     private lateinit var shipping: Shipping
     private lateinit var walletBalance:String
 
-    private lateinit var loadingDialog: AlertDialog
+    private lateinit var profile:Profile
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
+        //Inflating layout
         cartFragmentBinding = CartFragmentBinding.inflate(inflater, container, false)
 
+        //Initializing ViewModel class
         val application = requireNotNull(this.activity).application as MyApplication
         val viewModelFactory = CartViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(CartViewModel::class.java)
 
+        //Getting values from activity
         val activity = activity as HomeActivity
         activity.setAppBarElevation(0F)
         activity.setToolbarTitle(getString(R.string.title_cart))
         activity.setToolbarLogo(null)
         userId = activity.getUserId()
 
-        loadingDialog = createLoadingDialog()
-        loadingDialog.show()
-        //Getting user profile
-        viewModel.getProfile(userId)
+        //Getting arguments
+        val arguments = CartFragmentArgs.fromBundle(requireArguments())
+        profile = arguments.profile
+        shipping = profile.shipping
+        cartFragmentBinding.deliveryLocationTextView.text =
+            "${shipping.postcode} ${shipping.city}"
 
-        //Observe profile
-        viewModel.profileLiveData.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                shipping = it.shipping
-                cartFragmentBinding.deliveryLocationTextView.text =
-                    "${shipping.postcode} ${shipping.city}"
-            }
-        })
-
-        //Observe loading state
-        viewModel.loadingLiveData.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                if (it == Loading.SUCCESS) loadingDialog.dismiss()
-                else if (it == Loading.FAILED) loadingDialog.dismiss()
-            }
-        })
-
+        //Setting up cart RecyclcerView
         cartFragmentBinding.cartRecyclerView.itemAnimator = null
         //Setting up cart recyclerView
         cartListAdapter = CartListAdapter(CartListItemClickListener {
         }, this, viewLifecycleOwner)
         cartFragmentBinding.cartRecyclerView.adapter = cartListAdapter
-
 
         //Observing Cart Items
         viewModel.cartItemsLiveData.observe(viewLifecycleOwner, Observer {
@@ -188,14 +173,6 @@ class CartFragment : Fragment(), PaymentMethodFragment.OnPaymentMethodClickListe
         }else{
             viewModel.getWalletBalance(userId)
         }
-    }
-
-    private fun createLoadingDialog(): AlertDialog {
-        val layout = LayoutInflater.from(requireContext()).inflate(R.layout.loading_layout, null)
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setView(layout)
-        builder.setCancelable(false)
-        return builder.create()
     }
 
     private fun goToOrder() {

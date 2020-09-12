@@ -27,11 +27,6 @@ class OrderViewModel : ViewModel() {
     val orderLiveData: LiveData<OrderResponse>
         get() = _orderMutableLiveData
 
-    //Store all orders
-    private var _allOrdersMutableLiveData = MutableLiveData<List<OrderResponse>>()
-    val allOrdersLiveData:LiveData<List<OrderResponse>>
-    get() = _allOrdersMutableLiveData
-
     private var _loadingMutableLiveData = MutableLiveData<Loading>()
     val loadingLiveData:LiveData<Loading>
     get() = _loadingMutableLiveData
@@ -39,7 +34,6 @@ class OrderViewModel : ViewModel() {
     init {
         _loadingMutableLiveData.value = null
         _orderMutableLiveData.value = null
-        _allOrdersMutableLiveData.value = null
     }
 
     //Place order
@@ -55,21 +49,6 @@ class OrderViewModel : ViewModel() {
                 Timber.e("Failed to place order: ${e.message}")
                 _orderMutableLiveData.value = null
                 _loadingMutableLiveData.value = Loading.FAILED
-            }
-        }
-    }
-
-    //Get all orders
-    fun getAllOrders(customerId:Int){
-        uiScope.launch {
-            val responseDeferred = apiService.getAllOrdersAsync(customerId)
-            try {
-                val response = responseDeferred.await()
-                _allOrdersMutableLiveData.value = response
-                Timber.e("Successfully received all orders")
-            }catch (e:Exception){
-                Timber.e("Failed to get orders: ${e.message}")
-                _allOrdersMutableLiveData.value = null
             }
         }
     }

@@ -24,10 +24,6 @@ class SubscriptionFragment : Fragment() {
         subscriptionViewModel =
             ViewModelProviders.of(this).get(SubscriptionViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        subscriptionViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
 
         val activity = activity as HomeActivity
         activity.setAppBarElevation(10F)

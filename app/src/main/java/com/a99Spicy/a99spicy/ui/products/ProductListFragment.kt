@@ -14,6 +14,7 @@ import com.a99Spicy.a99spicy.MyApplication
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.databinding.ProductListFragmentBinding
 import com.a99Spicy.a99spicy.domain.DomainProduct
+import com.a99Spicy.a99spicy.network.Profile
 import com.a99Spicy.a99spicy.ui.HomeActivity
 import com.a99Spicy.a99spicy.utils.CountDrawable
 import com.google.android.material.snackbar.Snackbar
@@ -25,10 +26,11 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
 
     private lateinit var viewModel: ProductListViewModel
     private lateinit var productListFragmentBinding: ProductListFragmentBinding
+    private lateinit var profile: Profile
 
     private lateinit var productList: List<DomainProduct>
-    private var qty = 0
-    private var cartCount:String = "5"
+    private lateinit var catName: String
+    private var cartCount = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +47,9 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
         ).get(ProductListViewModel::class.java)
 
         val arguments = ProductListFragmentArgs.fromBundle(requireArguments())
+
+        profile = arguments.profile
+        catName = arguments.catname
         val catList = arguments.subCategories.categoryList
         val products = arguments.products.productList
         val (match, rest) = products.partition {
@@ -62,6 +67,7 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
 
         //Setting up the viewPager
         val productCategoryAdapter = ProductCategoryAdapter(
+            catName,
             this,
             viewLifecycleOwner, this, this
         )
@@ -85,10 +91,22 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
         //Observe cart items liveData
         viewModel.cartItemsLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {
-                cartCount = it.size.toString()
+                cartCount = it.size
                 Timber.e("Cart items: $cartCount")
+                productListFragmentBinding.productCartFab.count = it.size
             }
         })
+
+        //Set onClickListener to cart fab
+        productListFragmentBinding.productCartFab.setOnClickListener {
+            findNavController().navigate(
+                ProductListFragmentDirections.actionProductListFragmentToCartFragment(
+                    profile
+                )
+            )
+        }
+
+        //Attatching tablayout with viewPager
         TabLayoutMediator(productListFragmentBinding.categoryTabLayout,
             productListFragmentBinding.categoryViewPager,
             TabLayoutMediator.TabConfigurationStrategy { tab, position ->
@@ -98,25 +116,28 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
                 }
             }).attach()
 
-        setHasOptionsMenu(true)
+//        setHasOptionsMenu(true)
         return productListFragmentBinding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.product_menu, menu)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        setCount(requireContext(), cartCount, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_product_cart) {
-            findNavController().
-            navigate(ProductListFragmentDirections.actionProductListFragmentToCartFragment())
-        }
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.product_menu, menu)
+//    }
+//
+//    override fun onPrepareOptionsMenu(menu: Menu) {
+//        setCount(requireContext(), cartCount.toString(), menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if (item.itemId == R.id.action_product_cart) {
+//            findNavController().navigate(
+//                ProductListFragmentDirections.actionProductListFragmentToCartFragment(
+//                    profile
+//                )
+//            )
+//        }
+//        return true
+//    }
 
     override fun onProductItemClick(position: Int, quantity: Int) {
         val snackBar = Snackbar.make(
@@ -127,7 +148,7 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
         snackBar.setAction("Order Now", View.OnClickListener {
             findNavController().navigate(
                 ProductListFragmentDirections
-                    .actionProductListFragmentToCartFragment()
+                    .actionProductListFragmentToCartFragment(profile)
             )
         })
         snackBar.animationMode = Snackbar.ANIMATION_MODE_FADE
@@ -146,7 +167,7 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
         snackBar.setAction("Order Now", View.OnClickListener {
             findNavController().navigate(
                 ProductListFragmentDirections
-                    .actionProductListFragmentToCartFragment()
+                    .actionProductListFragmentToCartFragment(profile)
             )
         })
         snackBar.animationMode = Snackbar.ANIMATION_MODE_FADE

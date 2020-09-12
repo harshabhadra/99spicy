@@ -81,4 +81,9 @@
     <string name="newly_arrival">New Arrivals</string>
     <string name="newly_added_product_image">Newly added product image</string>
     <string name="your_cart_is_empty">Your Cart is Empty</string>
+    <string name="notification_channel" translatable="false">Orders notification Channel</string>
+    <string name="start_date">Start Date</string>
+    <string name="select_days">Select Days</string>
+    <string name="subscription_instruction">* Products Price may change as per market rates\n* You\'ll be charged weekly from your wallet\n* You can cancel your subscription after a week once started</string>
+    <string name="product_image">product image</string>
 </resources>

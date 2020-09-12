@@ -1,17 +1,28 @@
 package com.a99Spicy.a99spicy.ui.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.a99Spicy.a99spicy.R
+import com.a99Spicy.a99spicy.database.DatabaseCart
 import com.a99Spicy.a99spicy.databinding.NewListItemBinding
 import com.a99Spicy.a99spicy.domain.DomainProduct
 import com.bumptech.glide.Glide
 
-class NewArrivalListAdapter :
+private lateinit var viewModel: HomeViewModel
+private var pQty = 0
+
+class NewArrivalListAdapter(
+    private val owner: ViewModelStoreOwner,
+    private val lifecycleOwner: LifecycleOwner
+) :
     ListAdapter<DomainProduct, NewArrivalListAdapter.NewArrivalListViewHolder>(
         NewArrivalListDiffUtilCallBack()
     ) {
@@ -30,6 +41,59 @@ class NewArrivalListAdapter :
                     .error(R.drawable.app_logo)
                     .centerCrop()
                     .into(binding.newItemImageView)
+            }
+            binding.newAddToCartButton.setOnClickListener {
+                pQty = 0
+                binding.newAddToCartButton.visibility = View.GONE
+                binding.newIemQuantityLinearLayout.visibility = View.VISIBLE
+            }
+
+            //Increase quantity
+            binding.newAddQuantityButton.setOnClickListener {
+                pQty++
+                viewModel.addItemToCart(
+                    DatabaseCart(
+                        domainProduct.id,
+                        domainProduct.name,
+                        domainProduct.regularPrice,
+                        domainProduct.salePrice,
+                        domainProduct.images[0].src,
+                        pQty
+                    )
+                )
+                binding.newProductQtyTv.text = pQty.toString()
+            }
+
+            //Decrease quantity
+            binding.newItemMinusQuantityButton.setOnClickListener {
+
+                if (pQty > 1) {
+                    pQty--
+                    viewModel.addItemToCart(
+                        DatabaseCart(
+                            domainProduct.id,
+                            domainProduct.name,
+                            domainProduct.regularPrice,
+                            domainProduct.salePrice,
+                            domainProduct.images[0].src,
+                            pQty
+                        )
+                    )
+                    binding.newProductQtyTv.text = pQty.toString()
+                } else if (pQty == 1) {
+                    pQty--
+                    viewModel.removeItemFromCart(
+                        DatabaseCart(
+                            domainProduct.id,
+                            domainProduct.name,
+                            domainProduct.regularPrice,
+                            domainProduct.salePrice,
+                            domainProduct.images[0].src,
+                            pQty
+                        )
+                    )
+                    binding.newProductQtyTv.text = pQty.toString()
+                }
             }
             binding.executePendingBindings()
         }
@@ -53,6 +117,7 @@ class NewArrivalListAdapter :
 
     override fun onBindViewHolder(holder: NewArrivalListViewHolder, position: Int) {
 
+        viewModel = ViewModelProvider(owner).get(HomeViewModel::class.java)
         val product = getItem(position)
         product?.let {
             holder.bind(it)

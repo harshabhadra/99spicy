@@ -7,9 +7,11 @@
 
     </data>
 
-    <FrameLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/my_orders_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorProfileBack"
         tools:context=".ui.order.MyOrdersFragment">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -20,5 +22,14 @@
             android:layout_margin="@dimen/dimen_8dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    </FrameLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/no_order_lottie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lottie_rawRes="@raw/no_order"
+            app:lottie_loop="false"
+            android:visibility="invisible"
+            app:lottie_autoPlay="true"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

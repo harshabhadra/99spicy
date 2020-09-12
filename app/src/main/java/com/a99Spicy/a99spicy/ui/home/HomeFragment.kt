@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
     private lateinit var productList: List<DomainProduct>
     private var profile: Profile? = null
 
-    private var cartItems:String = "0"
+    private var cartItems: String = "0"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,9 +74,10 @@ class HomeFragment : Fragment() {
         profile?.let {
             shipping = it.shipping
             if (shipping?.address1!!.isNotEmpty() || shipping?.address1 != "") {
-                homeFragmentBinding.homeDeliveryLocationTextView.text = "${shipping?.postcode} ${shipping?.city}"
+                homeFragmentBinding.homeDeliveryLocationTextView.text =
+                    "${shipping?.postcode} ${shipping?.city}"
             }
-        }?:let {
+        } ?: let {
             if (userId.isNotEmpty()) {
                 loadingDialog = createLoadingDialog()
                 loadingDialog.show()
@@ -92,7 +93,7 @@ class HomeFragment : Fragment() {
         homeFragmentBinding.homeSlider.setSliderTransformAnimation(SliderAnimations.ZOOMOUTTRANSFORMATION)
 
         //Setting up the newArrival recyclerview
-        val newArrivalAdapter = NewArrivalListAdapter()
+        val newArrivalAdapter = NewArrivalListAdapter(this, viewLifecycleOwner)
         homeFragmentBinding.newArrivalRecyclerView.adapter = newArrivalAdapter
 
         //Setting up Home Category Recyclerview
@@ -109,7 +110,8 @@ class HomeFragment : Fragment() {
                     HomeFragmentDirections.actionNavigationHomeToProductListFragment(
                         DomainCategoryItems(subCategoryList.toList()),
                         it.catName,
-                        DomainProducts(productList)
+                        DomainProducts(productList),
+                        profile!!
                     )
                 )
 
@@ -143,6 +145,7 @@ class HomeFragment : Fragment() {
         //Observing profile liveData
         homeViewModel.profileLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {
+                profile = it
                 shipping = it.shipping
                 if (shipping?.address1!!.isNotEmpty() || shipping?.address1 != "") {
                     homeFragmentBinding.homeDeliveryLocationTextView.text =
@@ -174,29 +177,35 @@ class HomeFragment : Fragment() {
         homeViewModel.cartItemListLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {
                 cartItems = it.size.toString()
+                if (it.isNotEmpty()) {
+                    homeFragmentBinding.cartFab.count = it.size
+                }
             }
         })
 
-        setHasOptionsMenu(true)
+        //Set onClickListener to cartFab
+        homeFragmentBinding.cartFab.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToCartFragment(
+                profile!!
+            ))
+        }
+
+//        setHasOptionsMenu(true)
         return homeFragmentBinding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.home_menu, menu)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        setCount(requireContext(), cartItems, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        if (item.itemId == R.id.action_cart) {
-            findNavController()
-                .navigate(HomeFragmentDirections.actionNavigationHomeToCartFragment())
-        }
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.home_menu, menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//
+//        if (item.itemId == R.id.action_cart) {
+//            findNavController()
+//                .navigate(HomeFragmentDirections.actionNavigationHomeToCartFragment(profile!!))
+//        }
+//        return true
+//    }
 
     private fun createLoadingDialog(): AlertDialog {
         val layout = LayoutInflater.from(requireContext()).inflate(R.layout.loading_layout, null)
@@ -206,20 +215,20 @@ class HomeFragment : Fragment() {
         return builder.create()
     }
 
-    private fun setCount(context: Context, count: String?, menu: Menu) {
-        val menuItem: MenuItem = menu.findItem(R.id.action_cart)
-        val icon = menuItem.icon as LayerDrawable
-        val badge: CountDrawable
-
-        // Reuse drawable if possible
-        val reuse = icon.findDrawableByLayerId(R.id.ic_group_count)
-        badge = if (reuse != null && reuse is CountDrawable) {
-            reuse
-        } else {
-            CountDrawable(context)
-        }
-        badge.setCount(count!!)
-        icon.mutate()
-        icon.setDrawableByLayerId(R.id.ic_group_count, badge)
-    }
+//    private fun setCount(context: Context, count: String?, menu: Menu) {
+//        val menuItem: MenuItem = menu.findItem(R.id.action_cart)
+//        val icon = menuItem.icon as LayerDrawable
+//        val badge: CountDrawable
+//
+//        // Reuse drawable if possible
+//        val reuse = icon.findDrawableByLayerId(R.id.ic_group_count)
+//        badge = if (reuse != null && reuse is CountDrawable) {
+//            reuse
+//        } else {
+//            CountDrawable(context)
+//        }
+//        badge.setCount(count!!)
+//        icon.mutate()
+//        icon.setDrawableByLayerId(R.id.ic_group_count, badge)
+//    }
 }

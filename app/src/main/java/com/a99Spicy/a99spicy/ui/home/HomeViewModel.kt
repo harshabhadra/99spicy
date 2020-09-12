@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.a99Spicy.a99spicy.MyApplication
 import com.a99Spicy.a99spicy.Repository
+import com.a99Spicy.a99spicy.database.DatabaseCart
 import com.a99Spicy.a99spicy.database.MyDatabase
 import com.a99Spicy.a99spicy.domain.DomainProduct
 import com.a99Spicy.a99spicy.domain.DomainProducts
@@ -87,20 +88,16 @@ class HomeViewModel(application: MyApplication) : ViewModel() {
         }
     }
 
-    fun getSubCategories(parentId: Int) {
+    fun addItemToCart(databaseCart: DatabaseCart) {
         uiScope.launch {
-            val subCategoriesDeferred =
-                apiService.getSubCategoriesAsync(parentId)
-            try {
-                _subCategoriesMutableLiveData.value = subCategoriesDeferred.await().toSet()
-            }catch (e:Exception){
-                Timber.e("Failed to get subcategoreis: ${e.message}")
-            }
+            repository.addToCart(databaseCart)
         }
     }
 
-    fun setDomainProductList(list: List<DomainProducts>) {
-        _domainProductsMutableLiveData.value = list
+    fun removeItemFromCart(databaseCart: DatabaseCart) {
+        uiScope.launch {
+            repository.deleteCart(databaseCart)
+        }
     }
 
     override fun onCleared() {

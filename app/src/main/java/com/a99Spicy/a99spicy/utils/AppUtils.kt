@@ -1,6 +1,7 @@
 package com.a99Spicy.a99spicy.utils
 
 import android.content.Context
+import android.graphics.Color
 import com.a99Spicy.a99spicy.R
 import com.a99Spicy.a99spicy.domain.DomainBannerItem
 import com.a99Spicy.a99spicy.domain.DomainCategoryItem
@@ -16,7 +17,9 @@ class AppUtils {
         fun getBannerList(): List<DomainBannerItem> {
             val bannerList: MutableList<DomainBannerItem> = mutableListOf()
             bannerList.add(DomainBannerItem("", R.drawable.banner_a))
-            bannerList.add(DomainBannerItem("", R.drawable.banner_b))
+            bannerList.add(DomainBannerItem("", R.drawable.banner_c))
+            bannerList.add(DomainBannerItem("", R.drawable.banner_d))
+            bannerList.add(DomainBannerItem("", R.drawable.banner_e))
             return bannerList
         }
 
@@ -40,7 +43,17 @@ class AppUtils {
 
         fun createUserName(name:String):String{
             val random = Random(10000)
-            return "name_${System.currentTimeMillis()}${random.nextInt()}"
+            return "${name}_${System.currentTimeMillis()}${random.nextInt()}"
+        }
+
+        fun getRandomColor():Int{
+            val colorList:MutableList<Int> = mutableListOf()
+            colorList.add(Color.parseColor("#ffebee"))
+            colorList.add(Color.parseColor("#e8eaf6"))
+            colorList.add(Color.parseColor("#fff9c4"))
+            colorList.add(Color.parseColor("#c8e6c9"))
+            colorList.shuffle()
+            return colorList[0]
         }
     }
 }

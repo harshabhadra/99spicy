@@ -8,7 +8,7 @@ import java.io.IOException
 class RazorPayAuthInterceptor : Interceptor {
 
     private val authToken: String =
-        okhttp3.Credentials.basic("rzp_live_oX0LM5QcdnNfXj", "dI4IBnlUtcl9zJ7aQ8BQg9t1")
+        okhttp3.Credentials.basic("", "")
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {

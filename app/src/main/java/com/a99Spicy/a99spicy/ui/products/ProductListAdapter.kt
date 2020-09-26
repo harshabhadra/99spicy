@@ -66,9 +66,19 @@ class ProductListAdapter(
 //                binding.savingTextView.text = "Your Save ${save} Rs/-"
 //            }
             binding.addToCartButton.setOnClickListener {
-                pQty = 0
+                pQty = 1
                 binding.addToCartButton.visibility = View.GONE
                 binding.quantityLinearLayout.visibility = View.VISIBLE
+                viewModel.addItemToCart(
+                    DatabaseCart(
+                        domainDummyProduct.id,
+                        domainDummyProduct.name,
+                        domainDummyProduct.regularPrice,
+                        domainDummyProduct.salePrice,
+                        domainDummyProduct.images[0].src,
+                        pQty
+                    )
+                )
             }
 
             //Increase quantity

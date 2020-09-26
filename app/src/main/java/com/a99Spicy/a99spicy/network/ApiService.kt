@@ -13,10 +13,10 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.*
 
 
-private const val BASE_URL = "https://99spicy.com/wp-json/wc/v3/"
-private const val LOGIN_URL = "https://99spicy.com/wp-json/digits/"
-private const val RAZOR_PAY_URL = "https://api.razorpay.com/"
-private const val WALLET_URL = "https://99spicy.com/wp-json/wp/v2/"
+private const val BASE_URL = ""
+private const val LOGIN_URL = ""
+private const val RAZOR_PAY_URL = ""
+private const val WALLET_URL = ""
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -25,8 +25,8 @@ private val moshi = Moshi.Builder()
 private var clientBuilder = OkHttpClient.Builder()
     .addInterceptor(
         BasicAuthInterceptor(
-            "ck_6df4190887870befda8ecabd9464374e0e471347",
-            "cs_0b90627ad41cdee87f34f46e4f6e61b839764eb1"
+            "",
+            ""
         )
     )
 

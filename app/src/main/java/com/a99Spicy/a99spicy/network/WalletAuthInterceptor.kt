@@ -8,7 +8,7 @@ import java.io.IOException
 class WalletAuthInterceptor : Interceptor {
 
     private val authToken: String =
-        okhttp3.Credentials.basic("ambika@pinkoos", "aMEjl@9iJX8MHQIObZJDj9Jq")
+        okhttp3.Credentials.basic("", "")
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {

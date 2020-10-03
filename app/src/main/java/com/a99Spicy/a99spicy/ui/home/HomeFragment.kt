@@ -189,23 +189,8 @@ class HomeFragment : Fragment() {
                 profile!!
             ))
         }
-
-//        setHasOptionsMenu(true)
         return homeFragmentBinding.root
     }
-
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.home_menu, menu)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//
-//        if (item.itemId == R.id.action_cart) {
-//            findNavController()
-//                .navigate(HomeFragmentDirections.actionNavigationHomeToCartFragment(profile!!))
-//        }
-//        return true
-//    }
 
     private fun createLoadingDialog(): AlertDialog {
         val layout = LayoutInflater.from(requireContext()).inflate(R.layout.loading_layout, null)
@@ -214,21 +199,4 @@ class HomeFragment : Fragment() {
         builder.setCancelable(false)
         return builder.create()
     }
-
-//    private fun setCount(context: Context, count: String?, menu: Menu) {
-//        val menuItem: MenuItem = menu.findItem(R.id.action_cart)
-//        val icon = menuItem.icon as LayerDrawable
-//        val badge: CountDrawable
-//
-//        // Reuse drawable if possible
-//        val reuse = icon.findDrawableByLayerId(R.id.ic_group_count)
-//        badge = if (reuse != null && reuse is CountDrawable) {
-//            reuse
-//        } else {
-//            CountDrawable(context)
-//        }
-//        badge.setCount(count!!)
-//        icon.mutate()
-//        icon.setDrawableByLayerId(R.id.ic_group_count, badge)
-//    }
 }

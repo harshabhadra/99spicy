@@ -1,160 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.subscriptions.SubscribeFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <data>
+        <variable
+            name="product"
+            type="com.a99Spicy.a99spicy.domain.DomainProduct" />
+    </data>
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <com.google.android.material.card.MaterialCardView
+        android:layout_height="match_parent"
+        tools:context=".ui.subscriptions.SubscribeFragment">
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardElevation="@dimen/dimen_6dp"
-            app:cardCornerRadius="@dimen/dimen_0dp"
-            app:cardBackgroundColor="@android:color/white">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    tools:src="@drawable/grocery_place_holder"
-                    android:layout_margin="@dimen/dimen_16dp"
-                    android:contentDescription="@string/product_image" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:text="@string/dawat_biriyani_basmati_rice"
-                    android:layout_marginStart="@dimen/dimen_16dp"
-                    android:layout_marginEnd="@dimen/dimen_16dp"
-                    style="@style/TextAppearance.AppCompat.Headline"
-                    android:fontFamily="@font/montserrat"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    tools:text="Rs/- 16,500"
-                    android:text="@{`Rs/- `+product.salePrice}"
-                    android:fontFamily="@font/montserrat"
-                    android:textStyle="bold"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_marginStart="@dimen/dimen_16dp"
-                    android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_8dp"/>
 
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="@dimen/dimen_6dp"
+                    app:cardCornerRadius="@dimen/dimen_0dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="360dp"
+                            setImage="@{product.images.get(0).src}"
+                            tools:src="@drawable/grocery_place_holder"
+                            android:layout_margin="@dimen/dimen_16dp"
+                            android:contentDescription="@string/product_image" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="@string/dawat_biriyani_basmati_rice"
+                            android:layout_marginStart="@dimen/dimen_16dp"
+                            android:layout_marginEnd="@dimen/dimen_16dp"
+                            android:text="@{product.name}"
+                            style="@style/TextAppearance.AppCompat.Headline"
+                            android:fontFamily="@font/montserrat" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            tools:text="Rs/- 16,500"
+                            android:text="@{`Rs/- `+product.salePrice}"
+                            android:fontFamily="@font/montserrat"
+                            android:textStyle="bold"
+                            style="@style/TextAppearance.AppCompat.Title"
+                            android:layout_marginStart="@dimen/dimen_16dp"
+                            android:layout_marginEnd="@dimen/dimen_16dp"
+                            android:layout_marginTop="@dimen/dimen_8dp" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="@dimen/dimen_0dp"
+                    app:cardElevation="@dimen/dimen_6dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    android:layout_marginTop="@dimen/dimen_16dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textView23"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/open_sans"
+                            android:text="@string/start_date"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView34"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="12th Sep, 2020"
+                            setDateText="@{product.dateCreated}"
+                            android:fontFamily="@font/open_sans"
+                            style="@style/TextAppearance.AppCompat.Title"
+                            android:textColor="@android:color/black"
+                            app:layout_constraintStart_toStartOf="@+id/textView23"
+                            app:layout_constraintTop_toBottomOf="@+id/textView23" />
+
+                        <LinearLayout
+                            android:id="@+id/subscribe_quantity_linearLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@android:color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageButton
+                                android:id="@+id/subscribe_minus_quantity_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="@android:color/white"
+                                android:src="@drawable/ic_baseline_indeterminate_check_box_24" />
+
+                            <TextView
+                                android:id="@+id/subscribe_product_qty_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/open_sans_bold"
+                                android:gravity="center"
+                                android:padding="4dp"
+                                android:text="@string/zero" />
+
+                            <ImageButton
+                                android:id="@+id/subscribe_add_quantity_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="@android:color/white"
+                                android:src="@drawable/ic_baseline_add_box_24" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/textView41"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="64dp"
+                            android:fontFamily="@font/open_sans"
+                            android:text="@string/subscription_instruction"
+                            android:textColor="@android:color/black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/subscribe_quantity_linearLayout" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </ScrollView>
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:cardCornerRadius="@dimen/dimen_0dp"
-            app:cardElevation="@dimen/dimen_6dp"
-            app:cardBackgroundColor="@android:color/white"
-            android:layout_marginTop="@dimen/dimen_16dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView23"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/open_sans"
-                    android:text="@string/start_date"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView34"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="12th Sep, 2020"
-                    android:fontFamily="@font/open_sans"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:textColor="@android:color/black"
-                    app:layout_constraintStart_toStartOf="@+id/textView23"
-                    app:layout_constraintTop_toBottomOf="@+id/textView23" />
-
-                <LinearLayout
-                    android:id="@+id/subscribe_quantity_linearLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@android:color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageButton
-                        android:id="@+id/subscribe_minus_quantity_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/white"
-                        android:src="@drawable/ic_baseline_indeterminate_check_box_24" />
-
-                    <TextView
-                        android:id="@+id/subscribe_product_qty_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/open_sans_bold"
-                        android:gravity="center"
-                        android:padding="4dp"
-                        tools:text="1" />
-
-                    <ImageButton
-                        android:id="@+id/subscribe_add_quantity_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/white"
-                        android:src="@drawable/ic_baseline_add_box_24" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textView41"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="64dp"
-                    android:fontFamily="@font/open_sans"
-                    android:text="@string/subscription_instruction"
-                    android:textColor="@android:color/black"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/subscribe_quantity_linearLayout" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
-    </ScrollView>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@android:color/white">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/product_subscribe_button"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/subscribe"
-            android:layout_margin="@dimen/dimen_8dp"/>
-    </FrameLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:layout_gravity="bottom"
+            android:background="@android:color/white">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/product_subscribe_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/subscribe"
+                android:layout_margin="@dimen/dimen_8dp" />
+        </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

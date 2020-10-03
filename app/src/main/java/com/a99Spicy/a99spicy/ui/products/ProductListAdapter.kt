@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -131,10 +132,19 @@ class ProductListAdapter(
                 onProductMinusClickListener.onProductMinusClick(adapterPosition, 1)
             }
 
-            if (catName == "Dairy and Bakery"){
+            if (catName == "Dairy and Bakery") {
                 binding.subscribeButton.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.subscribeButton.visibility = View.INVISIBLE
+            }
+
+            //Set onClickListener to subscribe button
+            binding.subscribeButton.setOnClickListener {
+                it.findNavController().navigate(
+                    ProductListFragmentDirections.actionProductListFragmentToSubscribeFragment(
+                        domainDummyProduct
+                    )
+                )
             }
             binding.executePendingBindings()
         }

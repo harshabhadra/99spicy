@@ -8,8 +8,8 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [DatabaseProduct::class, DatabaseProductCategory::class,
-        DatabaseCart::class, DatabaseShipping::class],
-    version = 4,
+        DatabaseCart::class, DatabaseShipping::class, DatabaseCoupon::class],
+    version = 10,
     exportSchema = false
 )
 @TypeConverters(DataConverter::class)
@@ -18,7 +18,8 @@ abstract class MyDatabase : RoomDatabase() {
     abstract val productDao: ProductDao
     abstract val categoryDao: CategoryDao
     abstract val cartDao: CartDao
-    abstract val addressDao:AddressDao
+    abstract val addressDao: AddressDao
+    abstract val couponDao: CouponDao
 
     companion object {
         @Volatile

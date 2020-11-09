@@ -80,7 +80,7 @@ class WalletFragment : Fragment() {
             it?.let {
                 if (it == WalletLoading.SUCCESS || it == WalletLoading.FAILED) {
                     loadingDialog.dismiss()
-                }else{
+                } else {
                     loadingDialog.show()
                 }
             }
@@ -89,7 +89,7 @@ class WalletFragment : Fragment() {
         //Observe wallet livedata
         walletViewModel.walletResponseLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Toast.makeText(requireContext(),it.response, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), it.response, Toast.LENGTH_SHORT).show()
                 walletViewModel.getWalletBalance(userId)
                 walletViewModel.getWalletTransactions(userId)
             }
@@ -108,9 +108,9 @@ class WalletFragment : Fragment() {
             val message = data?.getStringExtra(Constants.MESSAGE)
             message?.let {
                 if (it == getString(R.string.success)) {
-                    val amount = data.getDoubleExtra(Constants.AMOUNT, 0.0)
+                    val amount = data.getDoubleExtra(Constants.AMOUNT, 0.0).div(100)
                     val walletRequest = WalletRequest("credit", amount, "Add to Wallet")
-                    walletViewModel.cdWallet(userId,walletRequest)
+                    walletViewModel.cdWallet(userId, walletRequest)
                     Timber.e("Adding to wallet")
                     loadingDialog = createLoadingDialog()
                     loadingDialog.show()
@@ -132,18 +132,28 @@ class WalletFragment : Fragment() {
 
         addButton.setOnClickListener {
             val amount = amountTextInput.text.toString()
-            if (amount.isEmpty()) {
-                Toast.makeText(requireContext(), "Enter Amount", Toast.LENGTH_SHORT).show()
-            } else {
-                dialog.dismiss()
-                val intent = Intent(activity, PaymentActivity::class.java)
-                intent.putExtra(Constants.AMOUNT, amount.toString())
-                intent.putExtra(
-                    Constants.TRANSACTION_MODE,
-                    getString(R.string.credit_card_debit_card_upi)
-                )
-                intent.putExtra(Constants.TRANSACTION_TYPE, getString(R.string.add_to_wallet))
-                startActivityForResult(intent, Constants.ADD_TO_WALLET_REQUEST_CODE)
+            when {
+                amount.isEmpty() -> {
+                    Toast.makeText(requireContext(), "Enter Amount", Toast.LENGTH_SHORT).show()
+                }
+                amount.toInt() < 1 -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "Cannot add amount less than 10 Rs/-",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                else -> {
+                    dialog.dismiss()
+                    val intent = Intent(activity, PaymentActivity::class.java)
+                    intent.putExtra(Constants.AMOUNT, amount.toString())
+                    intent.putExtra(
+                        Constants.TRANSACTION_MODE,
+                        getString(R.string.credit_card_debit_card_upi)
+                    )
+                    intent.putExtra(Constants.TRANSACTION_TYPE, getString(R.string.add_to_wallet))
+                    startActivityForResult(intent, Constants.ADD_TO_WALLET_REQUEST_CODE)
+                }
             }
         }
     }

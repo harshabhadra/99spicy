@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.a99Spicy.a99spicy.MyApplication
 import com.a99Spicy.a99spicy.Repository
 import com.a99Spicy.a99spicy.database.DatabaseCart
+import com.a99Spicy.a99spicy.database.DatabaseCoupon
 import com.a99Spicy.a99spicy.database.MyDatabase
 import com.a99Spicy.a99spicy.network.Api
 import com.a99Spicy.a99spicy.network.Profile
@@ -55,46 +56,59 @@ class CartViewModel(application: MyApplication) : ViewModel() {
     val walletResponseLiveData: LiveData<WalletResponse>
         get() = _walletResponseMutableLiveData
 
+    private var _totalMutableLiveData = MutableLiveData<String>()
+    val totalLiveData: LiveData<String>
+        get() = _totalMutableLiveData
+
     init {
         _profileMutableLiveData.value = null
         _loadingMutableLiveData.value = null
         _walletBalanceMutableLiveData.value = null
         _walletResponseMutableLiveData.value = null
+        _totalMutableLiveData.value = null
     }
 
-    //Get user profile
-    fun getProfile(userId: String) {
+    //Remove coupon
+    fun removeCoupon(coupon: DatabaseCoupon) {
         uiScope.launch {
-            val responseDeferred = apiService.getSingleCustomerAsync(userId)
-            try {
-                _loadingMutableLiveData.value = Loading.PENDING
-                val response = responseDeferred.await()
-                _profileMutableLiveData.value = response
-                _loadingMutableLiveData.value = Loading.SUCCESS
-                Timber.e("Successfully received profile")
-            } catch (e: Exception) {
-                Timber.e("Failed to get user profile: ${e.message}")
-                _profileMutableLiveData.value = null
-                _loadingMutableLiveData.value = Loading.FAILED
-            }
+            repository.removeCoupon(coupon)
         }
+    }
+
+    //Clear cart
+    fun clearCart() {
+        uiScope.launch {
+            repository.removeAllCart()
+        }
+    }
+
+    //set total amount
+    fun setTotal(total: String) {
+        _totalMutableLiveData.value = total
     }
 
     //Get wallet balance
     fun getWalletBalance(id: String) {
         uiScope.launch {
+            _loadingMutableLiveData.value = Loading.PENDING
             walletService.getWalletBalance(id).enqueue(object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     if (response.isSuccessful) {
                         response.body()?.let {
                             _walletBalanceMutableLiveData.value = it
+                            _loadingMutableLiveData.value = Loading.PENDING
+                        } ?: let {
+                            _loadingMutableLiveData.value = Loading.FAILED
                         }
+                    } else {
+                        _loadingMutableLiveData.value = Loading.FAILED
                     }
                 }
 
                 override fun onFailure(call: Call<String>, t: Throwable) {
                     Timber.e("Failed to get wallet balance: ${t.message}")
                     _walletBalanceMutableLiveData.value = null
+                    _loadingMutableLiveData.value = Loading.FAILED
                 }
             })
         }
@@ -103,11 +117,14 @@ class CartViewModel(application: MyApplication) : ViewModel() {
     //Debit/Credit to wallet
     fun cdWallet(id: String, walletRequest: WalletRequest) {
         uiScope.launch {
+            _loadingMutableLiveData.value = Loading.PENDING
             val responseDeferred = walletService.cDWalletAsync(id, walletRequest)
             try {
                 val response = responseDeferred.await()
                 _walletResponseMutableLiveData.value = response
+                _loadingMutableLiveData.value = Loading.SUCCESS
             } catch (e: Exception) {
+                _loadingMutableLiveData.value = Loading.FAILED
                 Timber.e("Failed to credit/debit to wallet: ${e.message}")
                 _walletResponseMutableLiveData.value = null
             }

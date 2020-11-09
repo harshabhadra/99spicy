@@ -4,21 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="item"
+            type="com.a99Spicy.a99spicy.network.SubscriptionsLineItem" />
     </data>
 
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="@dimen/dimen_6dp"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="@android:color/white">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/subs_list_imageView"
             android:layout_width="90dp"
             android:layout_height="90dp"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/grocery_place_holder" />
+            app:srcCompat="@drawable/app_logo" />
 
         <TextView
             android:id="@+id/textView37"
@@ -30,35 +38,40 @@
             android:fontFamily="@font/open_sans"
             android:textColor="@android:color/black"
             android:textSize="@dimen/dimen_16sp"
+            android:maxLength="40"
+            android:text="@{item.name}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView4"
+            app:layout_constraintStart_toEndOf="@+id/subs_list_imageView"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/dawat_biriyani_basmati_rice" />
 
         <TextView
             android:id="@+id/textView42"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/open_sans"
+            android:text="@{`Quanity: `+String.valueOf(item.quantity)}"
             android:textColor="@android:color/black"
+            app:layout_constraintEnd_toStartOf="@+id/subs_status_textView"
             app:layout_constraintStart_toStartOf="@+id/textView37"
             app:layout_constraintTop_toBottomOf="@+id/textView37"
             tools:text="Quanity: 5" />
 
         <TextView
-            android:id="@+id/textView43"
+            android:id="@+id/subscriptions_total_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/open_sans"
             android:textColor="@android:color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+            app:layout_constraintBottom_toBottomOf="@+id/subs_list_imageView"
             app:layout_constraintStart_toStartOf="@+id/textView37"
             app:layout_constraintTop_toBottomOf="@+id/textView42"
             tools:text="Total Price(Weekly): 120 Rs/-" />
 
         <View
+            android:id="@+id/view7"
             android:layout_width="0dp"
             android:layout_height="@dimen/dimen_1dp"
             android:layout_marginTop="8dp"
@@ -66,9 +79,50 @@
             android:background="@color/colorProfileBack"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView43"
+            app:layout_constraintTop_toBottomOf="@+id/subscriptions_total_textView"
             app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/subs_start_date_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:fontFamily="@font/open_sans"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/subs_end_date_textView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view7" />
+
+        <TextView
+            android:id="@+id/subs_end_date_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:fontFamily="@font/open_sans"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/subs_start_date_textView"
+            app:layout_constraintTop_toBottomOf="@+id/view7" />
+
+        <TextView
+            android:id="@+id/subs_status_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/open_sans"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="@+id/textView37"
+            app:layout_constraintStart_toEndOf="@+id/textView42"
+            app:layout_constraintTop_toBottomOf="@+id/textView37" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

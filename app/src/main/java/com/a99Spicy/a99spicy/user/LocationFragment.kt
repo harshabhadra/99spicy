@@ -36,10 +36,11 @@ class LocationFragment : Fragment() {
     private lateinit var locality: String
     private lateinit var name: String
     private lateinit var userId: String
-    private lateinit var phone:String
+    private lateinit var phone: String
+    private lateinit var email: String
 
     private lateinit var loadingDialog: AlertDialog
-    private lateinit var profile:Profile
+    private lateinit var profile: Profile
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +65,7 @@ class LocationFragment : Fragment() {
         //Set onClickListener to submit button
         locationFragmentBinding.signUpSubmitButton.setOnClickListener {
 
+            email = locationFragmentBinding.signUpEmailTextInput.text.toString()
             postCode = locationFragmentBinding.signUpPostCodeTextInput.text.toString()
             city = locationFragmentBinding.signUpCityTextInput.text.toString()
             state = locationFragmentBinding.signUpStateTextInput.text.toString()
@@ -98,9 +100,17 @@ class LocationFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+                email.isEmpty()->{
+                    Toast.makeText(
+                        requireContext(),
+                        "Enter Email",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 else -> {
                     val shipping = ShippingDetail(
-                        name, "", "", locality, "", city, postCode, "India", state
+                        name, "", "", locality, "", city, postCode, "India",
+                        state,phone, email
                     )
                     viewModel.setAddress(userId.toInt(), Address(shipping))
                     loadingDialog = createLoadingDialog()
@@ -129,7 +139,7 @@ class LocationFragment : Fragment() {
         //Observe loading liveData
         viewModel.loadingLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             it?.let {
-                if (it == LocationLoading.SUCCESS || it == LocationLoading.FAILED){
+                if (it == LocationLoading.SUCCESS || it == LocationLoading.FAILED) {
                     loadingDialog.dismiss()
                 }
             }
@@ -183,13 +193,13 @@ class LocationFragment : Fragment() {
 
     private fun createLoadingDialog(): AlertDialog {
         val layout = LayoutInflater.from(requireContext()).inflate(R.layout.loading_layout, null)
-        val builder = AlertDialog.Builder(requireContext(),R.style.TransparentDialog)
+        val builder = AlertDialog.Builder(requireContext(), R.style.TransparentDialog)
         builder.setView(layout)
         builder.setCancelable(false)
         return builder.create()
     }
 
-    private fun goToHome(userId:String, profile: Profile?) {
+    private fun goToHome(userId: String, profile: Profile?) {
         val intent = Intent(requireActivity(), HomeActivity::class.java)
         intent.putExtra(Constants.USER_ID, userId)
         intent.putExtra(Constants.PROFILE, profile)

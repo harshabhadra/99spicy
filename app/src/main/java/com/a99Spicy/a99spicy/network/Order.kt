@@ -10,8 +10,8 @@ data class PlaceOrder(
     var currency: String,
     @Json(name = "customer_id")
     var customerId: Int,
-    @Json(name = "shipping")
-    var shipping: Shipping,
+    @Json(name ="billing")
+    var billing: Billing,
     @Json(name = "payment_method")
     var paymentMethod: String,
     @Json(name = "payment_method_title")
@@ -21,18 +21,30 @@ data class PlaceOrder(
     @Json(name = "line_items")
     var lineItems: List<LineItem>,
     @Json(name = "set_paid")
-    var setPaid: Boolean
-):Parcelable
+    var setPaid: Boolean,
+    @Json(name = "customer_note")
+    var customer_note: String,
+    @Json(name = "coupon_lines")
+    var coupon_lines:List<CouponLine>?
+) : Parcelable
 
 @Parcelize
 data class LineItem(
     @Json(name = "product_id")
     var productId: Int,
     @Json(name = "name")
-    var productName:String,
+    var productName: String,
     @Json(name = "quantity")
-    var quantity: Int?=1
-):Parcelable
+    var quantity: Int? = 1,
+    @Json(name = "total")
+    var total:String
+) : Parcelable
+
+@Parcelize
+data class CouponLine(
+    @Json(name = "code")
+    var code: String
+) : Parcelable
 
 @Parcelize
 data class OrderResponse(
@@ -76,8 +88,8 @@ data class OrderResponse(
     var customerId: Int,
     @Json(name = "customer_note")
     var customerNote: String,
-    @Json(name = "shipping")
-    var shipping: Shipping,
+    @Json(name ="billing")
+    var billing: Billing,
     @Json(name = "payment_method")
     var paymentMethod: String,
     @Json(name = "payment_method_title")
@@ -85,16 +97,18 @@ data class OrderResponse(
     @Json(name = "transaction_id")
     var transactionId: String,
     @Json(name = "date_paid")
-    var datePaid: String,
+    var datePaid: String? = "",
     @Json(name = "date_paid_gmt")
-    var datePaidGmt: String,
+    var datePaidGmt: String? = "",
     @Json(name = "date_completed")
-    var dateCompleted:String? = "",
+    var dateCompleted: String? = "",
     @Json(name = "date_completed_gmt")
-    var dateCompletedGmt:String? = "",
+    var dateCompletedGmt: String? = "",
     @Json(name = "line_items")
-    var lineItems: List<ResponseLineItem>
-):Parcelable
+    var lineItems: List<ResponseLineItem>,
+    @Json(name = "coupon_lines")
+    var coupon_lines:List<CouponResponse>?
+) : Parcelable
 
 @Parcelize
 data class ResponseLineItem(
@@ -122,4 +136,18 @@ data class ResponseLineItem(
     var sku: String,
     @Json(name = "price")
     var price: Int
-):Parcelable
+) : Parcelable
+
+@Parcelize
+data class CouponResponse(
+    @Json(name = "id")
+    var id: Int,
+    @Json(name = "code")
+    var code: String,
+    @Json(name = "discount")
+    var discount: String,
+    @Json(name = "discount_tax")
+    var discount_tax: String,
+    @Json(name = "meta_data")
+    var couponMetaList: List<MetaDatam>?
+) : Parcelable

@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@+id/textView40"
+                app:layout_constraintEnd_toEndOf="@+id/na_sale_p_tv"
                 app:layout_constraintTop_toBottomOf="@+id/new_add_to_cart_button">
 
                 <ImageButton
@@ -83,12 +83,11 @@
                 tools:text="@string/dawat_biriyani_basmati_rice" />
 
             <TextView
-                android:id="@+id/textView40"
+                android:id="@+id/na_sale_p_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="@{product.salePrice+` Rs/-`}"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/dimen_16sp"
                 app:layout_constraintEnd_toEndOf="@+id/textView39"
@@ -102,9 +101,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/add"
-                app:layout_constraintEnd_toEndOf="@+id/textView40"
-                app:layout_constraintStart_toStartOf="@+id/textView40"
-                app:layout_constraintTop_toBottomOf="@+id/textView40" />
+                app:layout_constraintEnd_toEndOf="@+id/na_sale_p_tv"
+                app:layout_constraintStart_toStartOf="@+id/na_sale_p_tv"
+                app:layout_constraintTop_toBottomOf="@+id/na_sale_p_tv" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

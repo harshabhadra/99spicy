@@ -20,8 +20,11 @@
             android:id="@+id/action_navigation_home_to_cartFragment"
             app:destination="@id/cartFragment" />
         <action
-            android:id="@+id/action_navigation_home_to_deliveryAddressFragment"
-            app:destination="@id/deliveryAddressFragment" />
+            android:id="@+id/action_navigation_home_to_addressFragment"
+            app:destination="@id/addressFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
 
     <fragment
@@ -40,8 +43,8 @@
             android:id="@+id/action_navigation_notifications_to_myOrdersFragment"
             app:destination="@id/myOrdersFragment" />
         <action
-            android:id="@+id/action_navigation_notifications_to_deliveryAddressFragment"
-            app:destination="@id/deliveryAddressFragment" />
+            android:id="@+id/action_navigation_notifications_to_addressFragment"
+            app:destination="@id/addressFragment" />
     </fragment>
     <fragment
         android:id="@+id/productListFragment"
@@ -67,6 +70,9 @@
         <action
             android:id="@+id/action_productListFragment_to_subscribeFragment"
             app:destination="@id/subscribeFragment" />
+        <action
+            android:id="@+id/action_productListFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
@@ -75,26 +81,27 @@
         <action
             android:id="@+id/action_cartFragment_to_orderDetailsFragment"
             app:destination="@id/orderDetailsFragment" />
-        <action
-            android:id="@+id/action_cartFragment_to_deliveryAddressFragment"
-            app:destination="@id/deliveryAddressFragment" />
         <argument
             android:name="profile"
             app:argType="com.a99Spicy.a99spicy.network.Profile" />
+        <action
+            android:id="@+id/action_cartFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
     </fragment>
     <fragment
         android:id="@+id/addressFragment"
         android:name="com.a99Spicy.a99spicy.ui.profile.delivery.AddressFragment"
         tools:layout="@layout/fragment_address">
-        <argument
-            android:name="address"
-            app:argType="com.a99Spicy.a99spicy.domain.DeliveryAddress"
-            app:nullable="true" />
         <action
-            android:id="@+id/action_addressFragment_to_deliveryAddressFragment"
-            app:destination="@id/deliveryAddressFragment"
-            app:popUpTo="@id/navigation_notifications"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_addressFragment_to_navigation_notifications"
+            app:destination="@id/navigation_notifications" />
+        <argument
+            android:name="shipping"
+            app:argType="com.a99Spicy.a99spicy.network.Billing"
+            app:nullable="true" />
+        <argument
+            android:name="phone"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/walletFragment"
@@ -106,6 +113,9 @@
         <argument
             android:name="order"
             app:argType="com.a99Spicy.a99spicy.network.OrderResponse" />
+        <argument
+            android:name="sender"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/myOrdersFragment"
@@ -116,26 +126,37 @@
             app:destination="@id/orderDetailsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/deliveryAddressFragment"
-        android:name="com.a99Spicy.a99spicy.ui.profile.delivery.DeliveryAddressFragment">
-        <action
-            android:id="@+id/action_deliveryAddressFragment_to_addressFragment"
-            app:destination="@id/addressFragment" />
-        <argument
-            android:name="shipping"
-            app:argType="com.a99Spicy.a99spicy.network.Shipping"
-            app:nullable="true" />
-        <argument
-            android:name="sender"
-            app:argType="string" />
-    </fragment>
-    <fragment
         android:id="@+id/subscribeFragment"
         android:name="com.a99Spicy.a99spicy.ui.subscriptions.SubscribeFragment"
-        android:label="subscribe_fragment"
-        tools:layout="@layout/subscribe_fragment" >
+        tools:layout="@layout/subscribe_fragment">
         <argument
             android:name="product"
             app:argType="com.a99Spicy.a99spicy.domain.DomainProduct" />
+        <argument
+            android:name="profile"
+            app:argType="com.a99Spicy.a99spicy.network.Profile" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.a99Spicy.a99spicy.ui.SearchFragment"
+        tools:layout="@layout/search_fragment">
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="products"
+            app:argType="com.a99Spicy.a99spicy.domain.DomainProducts" />
+        <action
+            android:id="@+id/action_searchFragment_to_cartFragment"
+            app:destination="@id/cartFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="profile"
+            app:argType="com.a99Spicy.a99spicy.network.Profile" />
+        <action
+            android:id="@+id/action_searchFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
     </fragment>
 </navigation>

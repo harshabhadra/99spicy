@@ -8,15 +8,11 @@
         <variable
             name="address"
             type="com.a99Spicy.a99spicy.domain.DeliveryAddress" />
-        <variable
-            name="clickListener"
-            type="com.a99Spicy.a99spicy.ui.profile.delivery.AddressItemClickListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{()->clickListener.onAddressItemClick(address)}"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="8dp"
         app:cardElevation="6dp"

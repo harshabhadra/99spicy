@@ -51,13 +51,13 @@
             tools:text="@string/_99_00_rs" />
 
         <TextView
-            android:id="@+id/product_discount_textView"
+            android:id="@+id/product_regular_price_textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:visibility="invisible"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/open_sans"
-            android:text="@{product.salePrice+` Rs/-`}"
             app:layout_constraintBottom_toBottomOf="@+id/product_price_textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/product_price_textView"
@@ -74,7 +74,7 @@
             android:drawablePadding="8dp"
             android:text="@string/add"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/product_discount_textView"
+            app:layout_constraintEnd_toEndOf="@+id/product_regular_price_textView"
             app:layout_constraintTop_toBottomOf="@+id/saving_textView" />
 
         <Button
@@ -104,29 +104,31 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:visibility="invisible"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/open_sans"
             android:textColor="@color/colorGreen"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/product_price_textView"
-            app:layout_constraintTop_toBottomOf="@+id/product_discount_textView"
+            app:layout_constraintTop_toBottomOf="@+id/product_regular_price_textView"
             tools:text="Your Save 55.00 Rs/-" />
 
         <FrameLayout
-            android:id="@+id/frameLayout2"
+            android:id="@+id/discount_frameLayout"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
+            android:visibility="invisible"
             android:background="@drawable/savings"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/default_address_textView"
+                android:id="@+id/discount_percent_textView"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/fredoka_one"
+                android:textStyle="bold"
                 android:gravity="center"
                 android:textColor="@android:color/white"
                 android:textSize="10sp"

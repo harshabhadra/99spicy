@@ -78,8 +78,8 @@ data class Shipping(
 ): Parcelable
 
 data class Address(
-    @JsonClass(generateAdapter = true)
-    val shipping:ShippingDetail
+    @Json(name = "billing")
+    val billing:ShippingDetail
 )
 
 @Parcelize
@@ -101,5 +101,9 @@ data class ShippingDetail(
     @JsonClass(generateAdapter = true)
     var country: String,
     @JsonClass(generateAdapter = true)
-    var state: String
+    var state: String,
+    @JsonClass(generateAdapter = true)
+    var phone:String,
+    @JsonClass(generateAdapter = true)
+    var email:String,
 ):Parcelable

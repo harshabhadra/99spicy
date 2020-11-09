@@ -10,13 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.a99Spicy.a99spicy.databinding.ProductListItemBinding
 import com.a99Spicy.a99spicy.domain.DomainProduct
 import com.a99Spicy.a99spicy.domain.DomainProducts
+import com.a99Spicy.a99spicy.network.Profile
 
 private val productList: MutableSet<DomainProduct> = mutableSetOf()
 
 class ProductCategoryAdapter(
     private val catName:String,
+    private val profile: Profile,
     private val viewModelStoreOwner: ViewModelStoreOwner,
-    private val viewLifecycleOwner: LifecycleOwner,
+    private val viewModelFactory: ProductListViewModelFactory,
     private val onProductItemClickListener: ProductListAdapter.OnProductItemClickListener,
     private val onProductMinusClickListener: ProductListAdapter.OnProductMinusClickListener
 ) :
@@ -29,18 +31,22 @@ class ProductCategoryAdapter(
 
         fun bind(
             catName: String,
+            profile: Profile,
             categoryItem: DomainProducts,
             viewModelStoreOwner: ViewModelStoreOwner,
-            viewLifecycleOwner: LifecycleOwner,
+            viewModelFactory: ProductListViewModelFactory,
             onProductItemClickListener: ProductListAdapter.OnProductItemClickListener,
             onProductMinusClickListener: ProductListAdapter.OnProductMinusClickListener
         ) {
             productList.addAll(categoryItem.productList)
             if (productList.isNotEmpty()) {
-                val productListAdapter = ProductListAdapter(catName, viewModelStoreOwner,
-                    viewLifecycleOwner, onProductItemClickListener,onProductMinusClickListener)
+                val productListAdapter = ProductListAdapter(catName,profile,viewModelFactory, viewModelStoreOwner,
+                     onProductItemClickListener,onProductMinusClickListener)
                 binding.productListRecyclerView.adapter = productListAdapter
+                binding.productListRecyclerView.recycledViewPool.setMaxRecycledViews(0,50)
+                binding.productListRecyclerView.setItemViewCacheSize(50)
                 productListAdapter.submitList(categoryItem.productList.toList())
+                productListAdapter.notifyDataSetChanged()
             }
             binding.executePendingBindings()
         }
@@ -67,7 +73,7 @@ class ProductCategoryAdapter(
 
         val productCategory = getItem(position)
         productCategory?.let {
-            holder.bind(catName, it, viewModelStoreOwner, viewLifecycleOwner,
+            holder.bind(catName,profile, it, viewModelStoreOwner, viewModelFactory,
                 onProductItemClickListener,onProductMinusClickListener)
         }
     }

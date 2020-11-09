@@ -7,6 +7,9 @@
         <variable
             name="product"
             type="com.a99Spicy.a99spicy.domain.DomainProduct" />
+        <variable
+            name="viewModel"
+            type="com.a99Spicy.a99spicy.ui.subscriptions.SubscribeViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -54,11 +57,11 @@
                             android:fontFamily="@font/montserrat" />
 
                         <TextView
+                            android:id="@+id/subscribe_price_textView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="16dp"
                             tools:text="Rs/- 16,500"
-                            android:text="@{`Rs/- `+product.salePrice}"
                             android:fontFamily="@font/montserrat"
                             android:textStyle="bold"
                             style="@style/TextAppearance.AppCompat.Title"
@@ -118,6 +121,7 @@
                                 android:id="@+id/subscribe_minus_quantity_button"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:onClick="@{()->viewModel.removeQty()}"
                                 android:backgroundTint="@android:color/white"
                                 android:src="@drawable/ic_baseline_indeterminate_check_box_24" />
 
@@ -128,12 +132,13 @@
                                 android:fontFamily="@font/open_sans_bold"
                                 android:gravity="center"
                                 android:padding="4dp"
-                                android:text="@string/zero" />
+                                android:text="@{String.valueOf(viewModel.qtyLiveData)}" />
 
                             <ImageButton
                                 android:id="@+id/subscribe_add_quantity_button"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:onClick="@{()->viewModel.addQty()}"
                                 android:backgroundTint="@android:color/white"
                                 android:src="@drawable/ic_baseline_add_box_24" />
                         </LinearLayout>

@@ -1,32 +1,36 @@
 package com.a99Spicy.a99spicy.ui.profile.delivery
 
+import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import com.a99Spicy.a99spicy.MyApplication
+import com.a99Spicy.a99spicy.MainActivity
 import com.a99Spicy.a99spicy.R
-import com.a99Spicy.a99spicy.database.DatabaseShipping
 import com.a99Spicy.a99spicy.databinding.FragmentAddressBinding
-import com.a99Spicy.a99spicy.domain.DeliveryAddress
-import com.a99Spicy.a99spicy.domain.LocationDetails
+import com.a99Spicy.a99spicy.network.Address
+import com.a99Spicy.a99spicy.network.Billing
+import com.a99Spicy.a99spicy.network.Shipping
+import com.a99Spicy.a99spicy.network.ShippingDetail
 import com.a99Spicy.a99spicy.ui.HomeActivity
 import timber.log.Timber
 
 class AddressFragment : Fragment() {
 
     private lateinit var addressFragmentBinding: FragmentAddressBinding
-    private lateinit var viewModel: DeliveryAddressViewModel
-
+    private lateinit var viewModel: AddressViewModel
     private lateinit var userId: String
-
-    private lateinit var shippingDetails: DatabaseShipping
-    private var locationDetail: LocationDetails? = null
-    private var address: DeliveryAddress? = null
+    private lateinit var shippingDetails: ShippingDetail
+    private var address: Billing? = null
+    private lateinit var loadingDialog: AlertDialog
+    private lateinit var phone: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,40 +39,34 @@ class AddressFragment : Fragment() {
         // Inflate the layout for this fragment
         addressFragmentBinding = FragmentAddressBinding.inflate(inflater, container, false)
 
-        val application = requireNotNull(this.activity).application as MyApplication
-        val viewModelFactory = DeliveryAddressViewModelFactory(application)
-
         //Initialize ViewModel class
         viewModel =
-            ViewModelProvider(this, viewModelFactory).get(DeliveryAddressViewModel::class.java)
+            ViewModelProvider(this).get(AddressViewModel::class.java)
 
         val activity = activity as HomeActivity
         activity.setAppBarElevation(0F)
         activity.setToolbarTitle(getString(R.string.delivery_add))
         activity.setToolbarLogo(null)
-
         userId = activity.getUserId()
-        locationDetail = activity.getLocation()
-
-        locationDetail?.let {
-            addressFragmentBinding.location = it
-        }
 
         val arguments = AddressFragmentArgs.fromBundle(requireArguments())
-        address = arguments.address
+        address = arguments.shipping
+        phone = arguments.phone
+        addressFragmentBinding.location = address
+
+        addressFragmentBinding.phoneNumberTextInput.setText(phone)
 
         //Set onClickListener to save address button
         addressFragmentBinding.addressDetailsSaveButton.setOnClickListener {
 
             val firstName = addressFragmentBinding.addressNameTextInput.text.toString()
+            val email = addressFragmentBinding.addressEmailTextInput.text.toString()
             val city = addressFragmentBinding.shopCityTextInput.text.toString()
             val postCode = addressFragmentBinding.shopPostCodeTextInput.text.toString()
             val state = addressFragmentBinding.shopStateTextInput.text.toString()
             val mobile = addressFragmentBinding.phoneNumberTextInput.text.toString()
-            val flatNo = addressFragmentBinding.flatNoTextInput.text.toString()
-            val building = addressFragmentBinding.shopBuildingNoTextInput.text.toString()
             val locality = addressFragmentBinding.shopLocalityTextInput.text.toString()
-            val landMark = addressFragmentBinding.shopLandmarkTextInput.text.toString()
+            val address = addressFragmentBinding.shopAddressTextInput.text.toString()
 
             when {
                 firstName.isEmpty() -> {
@@ -82,6 +80,13 @@ class AddressFragment : Fragment() {
                     Toast.makeText(
                         requireContext(),
                         "Enter Mobile Number",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                email.isEmpty()->{
+                    Toast.makeText(
+                        requireContext(),
+                        "Enter Email Id",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -113,34 +118,59 @@ class AddressFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+                address.isEmpty() -> {
+                    Toast.makeText(requireContext(), "Enter Address", Toast.LENGTH_SHORT).show()
+                }
                 else -> {
-                    val address =
-                        "Mobile: $mobile, Flat no.: $flatNo, Building info: $building, locality: $locality, Landmark:$landMark"
 
-                    Timber.e("Address: Mobile: $mobile, Flat no.: $flatNo, Building info: $building, locality: $locality, Landmark:$landMark\"\n")
+                    Timber.e("Address: Mobile: $mobile, locality: $locality")
                     shippingDetails =
-                        DatabaseShipping(
-                            firstName = firstName,
-                            lastName = "",
+                        ShippingDetail(
+                            first_name = firstName,
+                            last_name = "",
                             company = "",
-                            address1 = address,
-                            address2 = "",
+                            address_1 = locality,
+                            address_2 = address,
                             city = city,
                             postcode = postCode,
                             country = "India",
-                            state = state
+                            state = state,
+                            phone = mobile,
+                            email = email
                         )
-                    viewModel.addAddress(shippingDetails)
                     Timber.e("Saving Address")
-                    findNavController().navigate(
-                        AddressFragmentDirections.actionAddressFragmentToDeliveryAddressFragment(
-                            null, getString(R.string.delivery_add)
-                        )
-                    )
+                    viewModel.updateShipping(userId, Address(shippingDetails))
+                    loadingDialog = createLoadingDialog()
+                    loadingDialog.show()
                 }
             }
         }
 
+        //Observe shipping update response
+        viewModel.updateShippingLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                val intent = Intent(activity, MainActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            }
+        })
+
+        //observe loading state
+        viewModel.loadingLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (it == AddressLoading.FAILED || it == AddressLoading.SUCCESS) {
+                    loadingDialog.dismiss()
+                }
+            }
+        })
         return addressFragmentBinding.root
+    }
+
+    private fun createLoadingDialog(): AlertDialog {
+        val layout = LayoutInflater.from(requireContext()).inflate(R.layout.loading_layout, null)
+        val builder = AlertDialog.Builder(requireContext(), R.style.TransparentDialog)
+        builder.setView(layout)
+        builder.setCancelable(false)
+        return builder.create()
     }
 }

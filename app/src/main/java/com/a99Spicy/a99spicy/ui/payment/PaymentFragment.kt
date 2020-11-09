@@ -76,7 +76,7 @@ class PaymentFragment : Fragment(), PaymentResultWithDataListener {
                 payTmOrderId = AppUtils.generatePaytmOrderId()
                 payCallBackUrl = payTmCallBackUrl + "theia/paytmCallback?ORDER_ID=" + payTmOrderId
                 //Generate transaction token for payTm
-                viewModel.generateTxnToken(payTmOrderId, "CUST_001", 1.00)
+                viewModel.generateTxnToken(payTmOrderId, "CUST_001", "1.00")
             }
         }
 

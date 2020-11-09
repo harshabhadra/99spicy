@@ -19,5 +19,6 @@ class Constants {
 
         const val PLACE_ORDER_REQUEST_CODE = 1002
         const val ADD_TO_WALLET_REQUEST_CODE = 1003
+        const val SUBSCRIBE_PRODUCT_REQUEST_CODE = 1004
     }
 }

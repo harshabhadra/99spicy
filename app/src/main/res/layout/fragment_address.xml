@@ -6,13 +6,8 @@
     <data>
         <variable
             name="location"
-            type="com.a99Spicy.a99spicy.domain.LocationDetails" />
+            type="com.a99Spicy.a99spicy.network.Billing" />
     </data>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.profile.delivery.AddressFragment">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -23,7 +18,8 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorProfileBack">
+                android:background="@color/colorProfileBack"
+                android:layout_marginBottom="64dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -59,6 +55,7 @@
                                     android:backgroundTint="@android:color/white"
                                     android:hint="@string/full_name"
                                     android:fontFamily="@font/open_sans"
+                                    android:text="@{location.firstName}"
                                     android:inputType="text"
                                     android:maxLines="1" />
                             </com.google.android.material.textfield.TextInputLayout>
@@ -78,10 +75,32 @@
                                     android:layout_height="wrap_content"
                                     android:backgroundTint="@android:color/white"
                                     android:hint="@string/mobile_number"
+                                    android:enabled="false"
                                     android:fontFamily="@font/open_sans"
                                     android:inputType="phone"
                                     android:maxLines="1" />
                             </com.google.android.material.textfield.TextInputLayout>
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/address_email_textInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="16dp">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/address_email_textInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@android:color/white"
+                                    android:hint="@string/enter_email_id"
+                                    android:text="@{location.email}"
+                                    android:fontFamily="@font/open_sans"
+                                    android:inputType="textEmailAddress"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -100,47 +119,12 @@
                             android:layout_marginBottom="32dp">
 
                             <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/flat_no_textInputLayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginEnd="16dp"
-                                android:layout_marginBottom="8dp">
-
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:id="@+id/flat_no_textInput"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:backgroundTint="@android:color/white"
-                                    android:hint="@string/flat_no"
-                                    android:inputType="text"
-                                    android:maxLines="1" />
-                            </com.google.android.material.textfield.TextInputLayout>
-
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/shop_buildingNo_textInputLayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginEnd="16dp"
-                                android:layout_marginBottom="8dp">
-
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:id="@+id/shop_buildingNo_textInput"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:backgroundTint="@android:color/white"
-                                    android:hint="@string/building_no_house_no"
-                                    android:inputType="text"
-                                    android:maxLines="1" />
-                            </com.google.android.material.textfield.TextInputLayout>
-
-                            <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/shop_locality_textInputLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                app:helperText="@string/locality_helper_text"
+                                app:helperTextEnabled="true"
+                                app:helperTextTextColor="@color/colorRed"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginTop="8dp"
                                 android:layout_marginEnd="16dp"
@@ -152,6 +136,29 @@
                                     android:layout_height="wrap_content"
                                     android:backgroundTint="@android:color/white"
                                     android:hint="@string/locality"
+                                    android:text="@{location.address1}"
+                                    android:inputType="text"
+                                    android:maxLines="1"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/shop_address_textInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                app:helperTextEnabled="true"
+                                app:helperText="Enter your Colony, Building No., Landmark etc in detail"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginBottom="8dp">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/shop_address_textInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@android:color/white"
+                                    android:hint="@string/address_details"
+                                    android:text="@{location.address2}"
                                     android:inputType="textMultiLine" />
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -170,28 +177,8 @@
                                     android:layout_height="wrap_content"
                                     android:backgroundTint="@android:color/white"
                                     android:hint="@string/postal_code"
-                                    android:enabled="false"
-                                    android:text="@{location.postCode}"
+                                    android:text="@{location.postcode}"
                                     android:inputType="text" />
-                            </com.google.android.material.textfield.TextInputLayout>
-
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/shop_landmark_textInputLayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginEnd="16dp"
-                                android:layout_marginBottom="8dp">
-
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:id="@+id/shop_landmark_textInput"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:backgroundTint="@android:color/white"
-                                    android:hint="@string/landmark"
-                                    android:inputType="text"
-                                    android:maxLines="1" />
                             </com.google.android.material.textfield.TextInputLayout>
 
                             <com.google.android.material.textfield.TextInputLayout
@@ -211,26 +198,6 @@
                                     android:hint="@string/city_name"
                                     android:inputType="text"
                                     android:text="@{location.city}"
-                                    android:maxLines="1" />
-                            </com.google.android.material.textfield.TextInputLayout>
-
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/shop_district_textInputLayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginEnd="16dp"
-                                android:layout_marginBottom="8dp">
-
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:id="@+id/shop_district_textInput"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:backgroundTint="@android:color/white"
-                                    android:hint="@string/district_name"
-                                    android:inputType="text"
-                                    android:text="@{location.district}"
                                     android:maxLines="1" />
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -279,7 +246,4 @@
                     android:text="@string/save_address" />
             </com.google.android.material.card.MaterialCardView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
-    </FrameLayout>
 </layout>

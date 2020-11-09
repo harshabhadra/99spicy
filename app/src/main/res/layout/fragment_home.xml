@@ -37,9 +37,9 @@
             android:drawableStart="@drawable/ic_baseline_location_on_24"
             android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
             android:drawablePadding="16dp"
-            android:fontFamily="@font/open_sans_semibold"
+            android:fontFamily="@font/open_sans"
             android:padding="8dp"
-            android:text="@string/set_your_delivery_address"
+            android:text="@string/enter_your_locality_for_listing_down_products"
             android:textColor="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
             app:layout_constraintStart_toStartOf="@+id/home_slider_card"
             app:layout_constraintTop_toBottomOf="@+id/home_slider_card" />
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -68,19 +68,37 @@
 
             <EditText
                 android:id="@+id/search_product_EditText"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
+                android:paddingStart="@dimen/dimen_16dp"
+                android:paddingEnd="@dimen/dimen_16dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/search_background"
-                android:drawableStart="@drawable/ic_baseline_search_24"
                 android:drawablePadding="16dp"
                 android:hint="@string/search_products"
+                android:inputType="text"
+                android:maxLines="1"
                 android:padding="4dp"
-                android:textSize="14sp" />
-        </FrameLayout>
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/search_imageButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/search_imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/search_product_EditText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/search_product_EditText"
+                app:srcCompat="@drawable/ic_baseline_search_24" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/home_slider_card"

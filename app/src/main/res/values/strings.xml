@@ -20,12 +20,13 @@
     <string name="shop_by_category">Shop By Category</string>
     <string name="dawat_biriyani_basmati_rice">Dawat Biriyani Basmati Rice</string>
     <string name="_50_off">50% Off</string>
-    <string name="_99_00_rs">99.00 RS/-</string>
+    <string name="_99_00_rs">00.00 RS/-</string>
     <string name="add">Add</string>
     <string name="subscribe">Subscribe</string>
     <string name="subscriptions">Subscriptions</string>
     <string name="payable_amount">Payable Amount</string>
     <string name="place_order">Place Order</string>
+    <string name="subscribe_product">Subscribe product</string>
     <string name="sign_out">Sign Out</string>
     <string name="wallet">My Wallet</string>
     <string name="orders">My Orders</string>
@@ -58,6 +59,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="success">Success</string>
+    <string name="wallet_success">success</string>
     <string name="failed">Failed</string>
     <string name="enter_amount">Enter Amount</string>
     <string name="add_to_wallet">Add To Wallet</string>
@@ -84,6 +86,23 @@
     <string name="notification_channel" translatable="false">Orders notification Channel</string>
     <string name="start_date">Start Date</string>
     <string name="select_days">Select Days</string>
-    <string name="subscription_instruction">* Products Price may change as per market rates\n* You\'ll be charged weekly from your wallet\n* You can cancel your subscription after a week once started</string>
+    <string name="subscription_instruction">* Products Price may change as per market rates\n* You\'ll be charged weekly\n* You can cancel your subscription after a week once started</string>
     <string name="product_image">product image</string>
+    <string name="debit">debit</string>
+    <string name="cash_on_delivery">Cash On Delivery</string>
+    <string name="locality_helper_text">Important: Enter Locality as per your PINCODE. Product will shown according to your LOCALITY</string>
+    <string name="address_details">Address Details</string>
+    <string name="tommorrow_12_pm">Tomorrow 12 PM</string>
+    <string name="tommorrow_9am">Tomorrow 9AM</string>
+    <string name="after_6_pm">After 6 PM</string>
+    <string name="after_4_pm">After 4 PM</string>
+    <string name="_4_00_pm_to_6pm">4.00 PM to 6PM</string>
+    <string name="within_2_hour">Within 2 hour</string>
+    <string name="within_1_hour">Within 1 hour</string>
+    <string name="select_timeslot">Select Time Slot</string>
+    <string name="select">Tap to Select</string>
+    <string name="apply_coupon">Apply Coupon</string>
+    <string name="fixed_cart">fixed_cart</string>
+    <string name="enter_email_id">Enter Email ID</string>
+    <string name="enter_your_locality_for_listing_down_products">Enter your locality for listing down products</string>
 </resources>

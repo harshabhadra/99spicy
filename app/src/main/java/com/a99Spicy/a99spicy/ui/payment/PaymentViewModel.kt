@@ -34,11 +34,11 @@ class PaymentViewModel : ViewModel() {
     }
 
     //PayTm
-    fun generateTxnToken(orderId: String, customerId: String, amount: Double) {
+    fun generateTxnToken(orderId: String, customerId: String, amount: String) {
         uiScope.launch {
             uiScope.launch {
 
-                payTmService?.generateTxnIdAsync(orderId, customerId, amount.toString())
+                payTmService?.generateTxnIdAsync(orderId, customerId, amount)
                     ?.enqueue(object : Callback<PaytmResponse> {
                         override fun onFailure(call: Call<PaytmResponse>, t: Throwable) {
                             Timber.e("Failed to get txn token : ${t.message}")
@@ -89,7 +89,7 @@ class PaymentViewModel : ViewModel() {
                                 Timber.e("Empty response:")
                             }
                         } else {
-                            Timber.e("Failed to get response: ${response.errorBody()}")
+                            Timber.e("Failed to get response: ${response.errorBody()?.string()}")
                         }
                     }
                 })

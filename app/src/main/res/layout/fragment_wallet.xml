@@ -59,7 +59,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_bold"
-                        android:text="@string/_99_00_rs"
+                        tools:text="@string/_99_00_rs"
                         app:layout_constraintEnd_toEndOf="@+id/textView5"
                         app:layout_constraintStart_toStartOf="@+id/textView5"
                         app:layout_constraintTop_toBottomOf="@+id/textView5" />

@@ -17,4 +17,7 @@ interface CartDao {
 
     @Delete
     fun deleteCartItem(databaseCart: DatabaseCart)
+
+    @Query("DELETE from cart_table")
+    fun clearCart()
 }

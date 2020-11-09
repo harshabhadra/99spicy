@@ -49,7 +49,7 @@ class MyOrdersFragment : Fragment() {
         myOrdersListAdapter = MyOrdersListAdapter(MyOrderListItemClickListener {
             findNavController().navigate(
                 MyOrdersFragmentDirections.actionMyOrdersFragmentToOrderDetailsFragment(
-                    it
+                    it,getString(R.string.orders)
                 )
             )
         })

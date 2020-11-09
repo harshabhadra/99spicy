@@ -1,36 +1,37 @@
 package com.a99Spicy.a99spicy.network
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 data class SubscribeProduct(
-    @Json(name = "customer_id")
-    var customerId: Int,
-    @Json(name = "status")
+    @JsonClass(generateAdapter = true)
+    var customer_id: Int,
+    @JsonClass(generateAdapter = true)
     var status: String,
-    @Json(name = "billing_period")
-    var billingPeriod: String,
-    @Json(name = "billing_interval")
-    var billingInterval: Int,
-    @Json(name = "start_date")
-    var startDate: String,
-    @Json(name = "end_date")
-    var endDate: String,
-    @Json(name = "payment_method")
-    var paymentMethod: String,
-    @Json(name = "set_paid")
-    var setPaid: Boolean,
-    @Json(name = "transaction_id")
-    var transactionId: String,
-    @Json(name = "shipping")
+    @JsonClass(generateAdapter = true)
+    var billing_period: String,
+    @JsonClass(generateAdapter = true)
+    var billing_interval: Int,
+    @JsonClass(generateAdapter = true)
+    var start_date: String,
+    @JsonClass(generateAdapter = true)
+    var end_date: String,
+    @JsonClass(generateAdapter = true)
+    var payment_method: String,
+    @JsonClass(generateAdapter = true)
+    var set_paid: Boolean,
+    @JsonClass(generateAdapter = true)
+    var transaction_id: String,
+    @JsonClass(generateAdapter = true)
     var shipping: Shipping,
-    @Json(name = "line_items")
-    var lineItems: List<SubLineItem>
+    @JsonClass(generateAdapter = true)
+    var line_items: List<SubLineItem>
 )
 
 data class SubLineItem(
-    @Json(name = "product_id")
-    var productId: Int,
-    @Json(name = "quantity")
+    @JsonClass(generateAdapter = true)
+    var product_id: Int,
+    @JsonClass(generateAdapter = true)
     var quantity: Int
 )
 
@@ -51,7 +52,7 @@ data class SubscribeResponse(
     var version: String,
     @Json(name = "date_created")
     var dateCreated: String,
-    @Json(name = "date_modif-ied")
+    @Json(name = "date_modified")
     var dateModified: String,
     @Json(name = "customer_id")
     var customerId: Int,
@@ -69,8 +70,8 @@ data class SubscribeResponse(
     var total: String,
     @Json(name = "total_tax")
     var totalTax: String,
-    @Json(name = "shipping")
-    var shipping: Shipping,
+//    @Json(name = "shipping")
+//    var shipping: Shipping,
     @Json(name = "payment_method")
     var paymentMethod: String,
     @Json(name = "payment_method_title")

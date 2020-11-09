@@ -8,21 +8,14 @@ import com.a99Spicy.a99spicy.MyApplication
 import com.a99Spicy.a99spicy.Repository
 import com.a99Spicy.a99spicy.database.DatabaseCart
 import com.a99Spicy.a99spicy.database.MyDatabase
+import com.a99Spicy.a99spicy.database.asDomainProductList
 import com.a99Spicy.a99spicy.domain.DomainProduct
-import com.a99Spicy.a99spicy.domain.DomainProducts
-import com.a99Spicy.a99spicy.domain.DomainSortedCategory
-import com.a99Spicy.a99spicy.domain.LocationDetails
 import com.a99Spicy.a99spicy.network.Api
-import com.a99Spicy.a99spicy.network.ProductCategory
 import com.a99Spicy.a99spicy.network.Profile
-import com.a99Spicy.a99spicy.ui.profile.Loading
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import timber.log.Timber
 
-enum class HomeLoading{
+enum class HomeLoading {
     SUCCESS, FAILED, PENDING
 }
 
@@ -36,25 +29,20 @@ class HomeViewModel(application: MyApplication) : ViewModel() {
     private val database = MyDatabase.getDatabase(application)
     private val repository = Repository(database)
 
-    private var _domainProductsMutableLiveData = MutableLiveData<List<DomainProducts>>()
-    val domainProductsLiveData: LiveData<List<DomainProducts>>
-        get() = _domainProductsMutableLiveData
-
-    private var _subCategoriesMutableLiveData = MutableLiveData<Set<ProductCategory>>()
-    val subCategoriesLiveData: LiveData<Set<ProductCategory>>
-        get() = _subCategoriesMutableLiveData
-
     private var _profileMutableLiveData = MutableLiveData<Profile>()
     val profileLiveData: LiveData<Profile>
         get() = _profileMutableLiveData
 
     private var _loadingMutableLiveData = MutableLiveData<HomeLoading>()
-    val loadingLiveData:LiveData<HomeLoading>
+    val loadingLiveData: LiveData<HomeLoading>
         get() = _loadingMutableLiveData
 
+    private var _searchMutableLiveData = MutableLiveData<List<DomainProduct>>()
+    val searchLiveData: LiveData<List<DomainProduct>>
+        get() = _searchMutableLiveData
+
     init {
-        _domainProductsMutableLiveData.value = null
-        _subCategoriesMutableLiveData.value = null
+        _searchMutableLiveData.value = null
         uiScope.launch {
             repository.refreshProducts()
             repository.refreshCategories()
@@ -97,6 +85,15 @@ class HomeViewModel(application: MyApplication) : ViewModel() {
     fun removeItemFromCart(databaseCart: DatabaseCart) {
         uiScope.launch {
             repository.deleteCart(databaseCart)
+        }
+    }
+
+    fun getProductsByName(name: String) {
+        uiScope.launch {
+            _searchMutableLiveData.value =
+                withContext(Dispatchers.IO) {
+                    database.productDao.getProductsByName(name).asDomainProductList()
+                }
         }
     }
 

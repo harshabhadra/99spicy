@@ -7,10 +7,25 @@
     tools:context=".ui.subscriptions.SubscriptionFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/subs_list_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/subscribe_list_item"
         android:layout_margin="@dimen/dimen_8dp"/>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/subs_empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:lottie_rawRes="@raw/empty_cart"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:textColor="@android:color/black" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -57,9 +57,15 @@ class OrderFragment(
 
         viewModel.loadingLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {
-                if (it == Loading.SUCCESS || it == Loading.FAILED) {
+                if (it == Loading.SUCCESS) {
                     dismiss()
-
+                } else if (it == Loading.FAILED) {
+                    dismiss()
+                    Toast.makeText(
+                        requireContext(),
+                        "Failed To Place Order. Try again",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         })

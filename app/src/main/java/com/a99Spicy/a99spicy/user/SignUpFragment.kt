@@ -38,7 +38,6 @@ class SignUpFragment : Fragment() {
     private lateinit var name: String
     private lateinit var userName: String
     private var fToken: String = ""
-
     private lateinit var otpDialog: AlertDialog
     private lateinit var otpView: OtpView
     private lateinit var verifyOtpButton: MaterialButton

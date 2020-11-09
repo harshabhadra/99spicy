@@ -7,7 +7,6 @@ import com.a99Spicy.a99spicy.domain.DeliveryAddress
 import com.a99Spicy.a99spicy.domain.DomainCategoryItem
 import com.a99Spicy.a99spicy.domain.DomainProduct
 import com.a99Spicy.a99spicy.network.*
-import com.a99Spicy.a99spicy.ui.order.Loading
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -16,11 +15,11 @@ class Repository(val database: MyDatabase) {
 
     private var endCategories = false
     private var pageC = 1
-    private var catList:MutableList<ProductCategory> = mutableListOf()
+    private var catList: MutableList<ProductCategory> = mutableListOf()
 
     private var endProducts = false
     private var pageP = 1
-    private var allProductList:MutableList<Product> = mutableListOf()
+    private var allProductList: MutableList<Product> = mutableListOf()
 
     //Get products
     val productList: LiveData<List<DomainProduct>> =
@@ -34,47 +33,57 @@ class Repository(val database: MyDatabase) {
             it.asDomainProductCategories()
         }
 
+    //Get coupons
+    val couponsList: LiveData<List<DatabaseCoupon>> = database.couponDao.getAllCoupons()
+
     //Get all cart items
-    val cartItemsList:LiveData<List<DatabaseCart>> = database.cartDao.getCartItems()
+    val cartItemsList: LiveData<List<DatabaseCart>> = database.cartDao.getCartItems()
 
     //Get all delivery address
-    val deliveryAddressList:LiveData<List<DeliveryAddress>> =
-        Transformations.map(database.addressDao.getAllAddress()){
+    val deliveryAddressList: LiveData<List<DeliveryAddress>> =
+        Transformations.map(database.addressDao.getAllAddress()) {
             it.asDomainDeliveryAddress()
         }
 
     //Insert product to cart
-    suspend fun addToCart(databaseCart: DatabaseCart){
-        withContext(Dispatchers.IO){
+    suspend fun addToCart(databaseCart: DatabaseCart) {
+        withContext(Dispatchers.IO) {
             database.cartDao.addItemToCart(databaseCart)
         }
     }
 
     //Delete product from cart
-    suspend fun deleteCart(databaseCart: DatabaseCart){
-        withContext(Dispatchers.IO){
+    suspend fun deleteCart(databaseCart: DatabaseCart) {
+        withContext(Dispatchers.IO) {
             database.cartDao.deleteCartItem(databaseCart)
         }
     }
 
     //Update cart item
-    suspend fun updateCartItem(databaseCart: DatabaseCart){
-        withContext(Dispatchers.IO){
+    suspend fun updateCartItem(databaseCart: DatabaseCart) {
+        withContext(Dispatchers.IO) {
             database.cartDao.updateItem(databaseCart)
         }
     }
 
-    //Add delivery address
-    suspend fun addAddress(databaseShipping: DatabaseShipping){
-        withContext(Dispatchers.IO){
-            database.addressDao.addAddress(databaseShipping)
+    //Remove all cart items
+    suspend fun removeAllCart() {
+        withContext(Dispatchers.IO) {
+            database.cartDao.clearCart()
         }
     }
 
-    //Remove address
-    suspend fun removeAddress(databaseShipping: DatabaseShipping){
-        withContext(Dispatchers.IO){
-            database.addressDao.removeAddress(databaseShipping)
+    //Add Coupon
+    suspend fun addCoupon(coupon: DatabaseCoupon) {
+        withContext(Dispatchers.IO) {
+            database.couponDao.addCoupons(coupon)
+        }
+    }
+
+    //Remove coupon
+    suspend fun removeCoupon(coupon: DatabaseCoupon) {
+        withContext(Dispatchers.IO) {
+            database.couponDao.removeCoupon(coupon)
         }
     }
 
@@ -87,10 +96,10 @@ class Repository(val database: MyDatabase) {
                 try {
                     Timber.e("Product list received from server successfully")
                     val products = productsDeferred.await()
-                    if (products.isNotEmpty()){
-                        pageP ++
+                    if (products.isNotEmpty()) {
+                        pageP++
                         endProducts = false
-                    }else{
+                    } else {
                         endProducts = true
                         pageP = 1
                     }
@@ -112,10 +121,10 @@ class Repository(val database: MyDatabase) {
                     Api.retrofitService.getCategoriesAsync(pageC, 100)
                 try {
                     val categories = categoryDeferred.await()
-                    if (categories.isNotEmpty()){
+                    if (categories.isNotEmpty()) {
                         pageC++
                         endCategories = false
-                    }else{
+                    } else {
                         endCategories = true
                         pageC = 1
                     }

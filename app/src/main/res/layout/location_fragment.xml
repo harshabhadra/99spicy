@@ -53,6 +53,24 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/sign_up_email_textInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dimen_8dp"
+                    android:layout_marginTop="@dimen/dimen_24dp"
+                    android:layout_marginEnd="@dimen/dimen_8dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/sign_up_email_textInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:background="@android:color/white"
+                        android:hint="@string/enter_email_id" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/sign_up_post_code_textInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

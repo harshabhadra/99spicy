@@ -116,9 +116,9 @@ class ProfileFragment : Fragment() {
             getString(R.string.delivery_add) -> {
                 findNavController().navigate(
                     ProfileFragmentDirections
-                        .actionNavigationNotificationsToDeliveryAddressFragment(
-                            profile.shipping,
-                            getString(R.string.title_profile)
+                        .actionNavigationNotificationsToAddressFragment(
+                            profile.billing,
+                            phone
                         )
                 )
             }

@@ -13,11 +13,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.*
 
 
-private const val BASE_URL = "https://99spicy.com/wp-json/wc/v3/"
-private const val LOGIN_URL = "https://99spicy.com/wp-json/digits/"
-private const val RAZOR_PAY_URL = "https://api.razorpay.com/"
-private const val WALLET_URL = "https://99spicy.com/wp-json/wp/v2/"
-private const val SUBSCRIBE_URL = "https://99spicy.com/wp-json/wc/v1/"
+
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -26,8 +22,8 @@ private val moshi = Moshi.Builder()
 private var clientBuilder = OkHttpClient.Builder()
     .addInterceptor(
         BasicAuthInterceptor(
-            "ck_6df4190887870befda8ecabd9464374e0e471347",
-            "cs_0b90627ad41cdee87f34f46e4f6e61b839764eb1"
+            "",
+            ""
         )
     )
 
@@ -55,6 +51,7 @@ class RetrofitClient() {
         fun getSubsClient():Retrofit{
             return Retrofit.Builder()
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .baseUrl(SUBSCRIBE_URL)
                 .client(clientBuilder.build())
@@ -63,7 +60,7 @@ class RetrofitClient() {
 
         fun getRetrofitClient(): Retrofit {
             return Retrofit.Builder()
-                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(BASE_URL)
                 .client(clientBuilder.build())
                 .build()
@@ -101,6 +98,9 @@ object Api {
     val retrofitService: ApiService by lazy {
         RetrofitClient.getClient().create(ApiService::class.java)
     }
+    val subscribeService: ApiService by lazy{
+        RetrofitClient.getSubsClient().create(ApiService::class.java)
+    }
     val retroService: ApiService by lazy {
         RetrofitClient.getRetrofitClient().create(ApiService::class.java)
     }
@@ -126,25 +126,11 @@ interface ApiService {
         @Query("per_page") per_page: Int
     ): Deferred<List<Product>>
 
-    //Get products by category
-    @GET("products")
-    fun getProductsByCatAsync(
-        @Query("category") catId: String,
-        @Query("page") page: Int,
-        @Query("per_page") per_page: Int
-    ): Deferred<List<Product>>
-
     //Get products categories
     @GET("products/categories")
     fun getCategoriesAsync(
         @Query("page") page: Int,
         @Query("per_page") per_page: Int
-    ): Deferred<List<ProductCategory>>
-
-    //Get product sub-categories
-    @GET("products/categories")
-    fun getSubCategoriesAsync(
-        @Query("parent") parentId: Int
     ): Deferred<List<ProductCategory>>
 
     //Razor pay order id
@@ -212,7 +198,21 @@ interface ApiService {
     ): Deferred<WalletResponse>
 
     //Subscribe product
-    @POST("subscriptions")
+    @POST("v1/subscriptions")
     fun subscribeProductAsync(@Body subscribeProduct: SubscribeProduct):Deferred<SubscribeResponse>
 
+    //Get all Subscriptions
+    @GET("v1/subscriptions")
+    fun getAllSubscriptionsAsync(
+        @Query("customer")customer:String,
+        @Query("page")page: Int,
+        @Query("per_page") per_page: Int,
+    ):Deferred<List<Subscription>>
+
+    //Get coupons
+    @GET("coupons")
+    fun getCouponAsync():Deferred<List<Coupon>>
+
+    @GET("coupons")
+    fun getCoupons():Call<List<Coupon>>
 }

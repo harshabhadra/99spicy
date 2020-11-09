@@ -15,9 +15,11 @@ import com.a99Spicy.a99spicy.database.DatabaseCart
 import com.a99Spicy.a99spicy.databinding.NewListItemBinding
 import com.a99Spicy.a99spicy.domain.DomainProduct
 import com.bumptech.glide.Glide
+import timber.log.Timber
 
 private lateinit var viewModel: HomeViewModel
 private var pQty = 0
+private var salePrice: String? = null
 
 class NewArrivalListAdapter(
     private val owner: ViewModelStoreOwner,
@@ -42,10 +44,33 @@ class NewArrivalListAdapter(
                     .centerCrop()
                     .into(binding.newItemImageView)
             }
+
+            val index = domainProduct.index
+            index?.let {
+                if (index != -1) {
+                    val saleMeta = domainProduct.metaData[index]
+                    salePrice = saleMeta.value
+                    Timber.e(("New arrival item sale price: $salePrice"))
+                    binding.naSalePTv.text = "${salePrice} Rs/-"
+                }
+            }
             binding.newAddToCartButton.setOnClickListener {
-                pQty = 0
+                pQty = 1
                 binding.newAddToCartButton.visibility = View.GONE
                 binding.newIemQuantityLinearLayout.visibility = View.VISIBLE
+                viewModel.addItemToCart(
+                    DatabaseCart(
+                        domainProduct.id,
+                        domainProduct.name,
+                        domainProduct.regularPrice,
+                        domainProduct.metaData[index!!].value,
+                        domainProduct.images[0].src,
+                        pQty,
+                        domainProduct.categories[0].id,
+                        domainProduct.categories[1].id
+                    )
+                )
+                binding.newProductQtyTv.text = pQty.toString()
             }
 
             //Increase quantity
@@ -56,9 +81,11 @@ class NewArrivalListAdapter(
                         domainProduct.id,
                         domainProduct.name,
                         domainProduct.regularPrice,
-                        domainProduct.salePrice,
+                        domainProduct.metaData[index!!].value,
                         domainProduct.images[0].src,
-                        pQty
+                        pQty,
+                        domainProduct.categories[0].id,
+                        domainProduct.categories[1].id
                     )
                 )
                 binding.newProductQtyTv.text = pQty.toString()
@@ -74,9 +101,11 @@ class NewArrivalListAdapter(
                             domainProduct.id,
                             domainProduct.name,
                             domainProduct.regularPrice,
-                            domainProduct.salePrice,
+                            domainProduct.metaData[index!!].value,
                             domainProduct.images[0].src,
-                            pQty
+                            pQty,
+                            domainProduct.categories[0].id,
+                            domainProduct.categories[1].id
                         )
                     )
                     binding.newProductQtyTv.text = pQty.toString()
@@ -87,9 +116,11 @@ class NewArrivalListAdapter(
                             domainProduct.id,
                             domainProduct.name,
                             domainProduct.regularPrice,
-                            domainProduct.salePrice,
+                            domainProduct.metaData[index!!].value,
                             domainProduct.images[0].src,
-                            pQty
+                            pQty,
+                            domainProduct.categories[0].id,
+                            domainProduct.categories[1].id
                         )
                     )
                     binding.newProductQtyTv.text = pQty.toString()

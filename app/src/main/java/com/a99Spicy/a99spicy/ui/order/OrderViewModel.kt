@@ -46,7 +46,7 @@ class OrderViewModel : ViewModel() {
                 _orderMutableLiveData.value = response
                 _loadingMutableLiveData.value = Loading.SUCCESS
             }catch (e:Exception){
-                Timber.e("Failed to place order: ${e.message}")
+                Timber.e("Failed to place order: ${e.message.toString()}")
                 _orderMutableLiveData.value = null
                 _loadingMutableLiveData.value = Loading.FAILED
             }

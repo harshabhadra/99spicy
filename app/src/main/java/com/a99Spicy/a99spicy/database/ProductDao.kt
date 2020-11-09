@@ -9,6 +9,9 @@ interface ProductDao {
     @Query("SELECT * from products_table")
     fun getAllProducts():LiveData<List<DatabaseProduct>>
 
+    @Query("SELECT * from products_table WHERE name = :name")
+    fun getProductsByName(name:String):List<DatabaseProduct>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertProducts(vararg product: DatabaseProduct)
 

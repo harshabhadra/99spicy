@@ -98,6 +98,12 @@ class HomeActivity : AppCompatActivity() {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
     }
 
+    override fun onSaveInstanceState(oldInstanceState: Bundle) {
+        super.onSaveInstanceState(oldInstanceState)
+        oldInstanceState.clear()
+    }
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,

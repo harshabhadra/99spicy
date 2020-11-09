@@ -38,7 +38,8 @@ data class DomainProduct(
     var purchaseNote: String? = "",
     var categories: List<DomainCategory>,
     var images: List<DomainImage>,
-    var metaData: List<DomainMetaDatam>
+    var metaData: List<DomainMetaDatam>,
+    var index:Int?= -1
 ):Parcelable
 
 @Parcelize

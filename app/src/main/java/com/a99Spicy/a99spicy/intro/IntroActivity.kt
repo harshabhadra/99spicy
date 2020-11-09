@@ -79,11 +79,13 @@ class IntroActivity : AppIntro2() {
         isColorTransitionsEnabled = true
         // Toggle Indicator Visibility
         isIndicatorEnabled = true
+        isSystemBackButtonLocked = true
+        isWizardMode = true
         setIndicatorColor(
             selectedIndicatorColor = R.color.colorPrimaryDark,
             unselectedIndicatorColor = R.color.colorPrimaryLight
         )
-        setImmersiveMode()
+//        setImmersiveMode()
         askForPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 4, false)
     }
 

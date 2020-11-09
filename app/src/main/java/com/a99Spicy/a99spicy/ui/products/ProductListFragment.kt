@@ -1,6 +1,8 @@
 package com.a99Spicy.a99spicy.ui.products
 
 import android.content.Context
+import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
@@ -16,10 +18,12 @@ import com.a99Spicy.a99spicy.databinding.ProductListFragmentBinding
 import com.a99Spicy.a99spicy.domain.DomainProduct
 import com.a99Spicy.a99spicy.network.Profile
 import com.a99Spicy.a99spicy.ui.HomeActivity
+import com.a99Spicy.a99spicy.utils.Constants
 import com.a99Spicy.a99spicy.utils.CountDrawable
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
-import timber.log.Timber
+import java.util.*
 
 class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickListener,
     ProductListAdapter.OnProductMinusClickListener {
@@ -31,6 +35,11 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
     private lateinit var productList: List<DomainProduct>
     private lateinit var catName: String
     private var cartCount = 1
+    private var cityName: String = ""
+    private var fProductList: MutableSet<DomainProduct> = mutableSetOf()
+    private var index: Int = -1
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var phone: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,18 +56,62 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
         ).get(ProductListViewModel::class.java)
 
         val arguments = ProductListFragmentArgs.fromBundle(requireArguments())
-
+        sharedPreferences =
+            requireActivity().getSharedPreferences(Constants.LOG_IN, Context.MODE_PRIVATE)
+        phone = sharedPreferences.getString(Constants.PHONE, "")!!
         profile = arguments.profile
-        catName = arguments.catname
+        cityName = profile.billing.address1
+        catName = arguments.catname.toLowerCase(Locale.getDefault())
         val catList = arguments.subCategories.categoryList
         val products = arguments.products.productList
         val (match, rest) = products.partition {
             it.name == "Wallet Topup"
         }
         productList = rest
-
-        Timber.e("total no. of products: ${productList.size}")
-        Timber.e("Categories : ${catList.size}")
+        fProductList.clear()
+        for (product in productList) {
+            val metaList = product.metaData
+            for (meta in metaList) {
+                if (meta.key.toLowerCase(Locale.getDefault()) == "_${cityName.toLowerCase(Locale.getDefault())}_sale_price") {
+                    if (meta.value.isNotEmpty()) {
+                        index = metaList.indexOf(meta)
+                        val domainP = DomainProduct(
+                            product.id,
+                            product.name,
+                            product.slug,
+                            product.dateCreated,
+                            product.dateModified,
+                            product.status,
+                            product.featured,
+                            product.description,
+                            product.shortDescription,
+                            product.sku,
+                            product.price,
+                            product.regularPrice,
+                            product.salePrice,
+                            product.onSale,
+                            product.purchasable,
+                            product.totalSales,
+                            product.taxStatus,
+                            product.taxClass,
+                            product.stockQuantity,
+                            product.stockStatus,
+                            product.weight,
+                            product.reviewsAllowed,
+                            product.averageRating,
+                            product.ratingCount,
+                            product.relatedIds,
+                            product.purchaseNote,
+                            product.categories,
+                            product.images,
+                            product.metaData,
+                            index
+                        )
+                        fProductList.add(domainP)
+                    }
+                }
+            }
+        }
 
         val activity = activity as HomeActivity
         activity.setToolbarLogo(null)
@@ -67,22 +120,42 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
 
         //Setting up the viewPager
         val productCategoryAdapter = ProductCategoryAdapter(
-            catName,
+            catName, profile,
             this,
-            viewLifecycleOwner, this, this
+            productListViewModelFactory,
+            this, this
         )
         productListFragmentBinding.categoryViewPager.adapter = productCategoryAdapter
 
         viewModel.resetProductsList()
-        for (cat in catList) {
-            Timber.e("category : ${cat.catId}")
-            getProductsByCategory(cat.catId)
-        }
+        if (fProductList.isNotEmpty()) {
+            for (cat in catList) {
 
+                getProductsByCategory(cat.catId)
+            }
+        } else {
+            MaterialAlertDialogBuilder(requireContext())
+                .setMessage(
+                    "No products found for your locality ${
+                        cityName.toUpperCase(
+                            Locale.getDefault()
+                        )
+                    }. Update your locality & Pin Code in delivery address\nProfile>Address Book"
+                )
+                .setPositiveButton("Ok", DialogInterface.OnClickListener { dialog, _ ->
+                    dialog.dismiss()
+                    findNavController().navigate(
+                        ProductListFragmentDirections
+                            .actionProductListFragmentToAddressFragment(
+                                profile.billing,
+                                phone
+                            )
+                    )
+                }).show()
+        }
         //Observing products by category
         viewModel.productsByCategoryLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Timber.e("no. of products: ${it.size}")
                 productCategoryAdapter.submitList(it)
                 productCategoryAdapter.notifyDataSetChanged()
             }
@@ -92,7 +165,6 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
         viewModel.cartItemsLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {
                 cartCount = it.size
-                Timber.e("Cart items: $cartCount")
                 productListFragmentBinding.productCartFab.count = it.size
             }
         })
@@ -106,7 +178,7 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
             )
         }
 
-        //Attatching tablayout with viewPager
+        //Attaching tabLayout with viewPager
         TabLayoutMediator(productListFragmentBinding.categoryTabLayout,
             productListFragmentBinding.categoryViewPager,
             TabLayoutMediator.TabConfigurationStrategy { tab, position ->
@@ -115,29 +187,13 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
                     tab.text = catList[position].catName
                 }
             }).attach()
-
-//        setHasOptionsMenu(true)
         return productListFragmentBinding.root
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.product_menu, menu)
-//    }
-//
-//    override fun onPrepareOptionsMenu(menu: Menu) {
-//        setCount(requireContext(), cartCount.toString(), menu)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if (item.itemId == R.id.action_product_cart) {
-//            findNavController().navigate(
-//                ProductListFragmentDirections.actionProductListFragmentToCartFragment(
-//                    profile
-//                )
-//            )
-//        }
-//        return true
-//    }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.clear()
+    }
 
     override fun onProductItemClick(position: Int, quantity: Int) {
         val snackBar = Snackbar.make(
@@ -179,12 +235,13 @@ class ProductListFragment : Fragment(), ProductListAdapter.OnProductItemClickLis
 
     //Get products by category
     private fun getProductsByCategory(catId: Int) {
-        val (match, rest) = productList.partition {
-            it.categories[0].id == catId || it.categories[1].id == catId
-        }
-        Timber.e("Match list size: ${match.size}")
-        if (match.isNotEmpty()) {
-            viewModel.setCategoryProductList(match)
+        if (fProductList.isNotEmpty()) {
+            val (match, rest) = fProductList.toList().partition {
+                it.categories[0].id == catId || it.categories[1].id == catId
+            }
+            if (match.isNotEmpty()) {
+                viewModel.setCategoryProductList(match)
+            }
         }
     }
 

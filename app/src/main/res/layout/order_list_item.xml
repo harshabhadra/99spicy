@@ -116,6 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/open_sans"
+            android:text="@{order.dateCreated}"
             android:textColor="@android:color/black"
             app:layout_constraintEnd_toEndOf="@+id/textView28"
             app:layout_constraintStart_toStartOf="@+id/textView28"

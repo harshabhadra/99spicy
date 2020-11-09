@@ -1,8 +1,7 @@
-package com.a99Spicy.a99spicy.ui.cart
+ package com.a99Spicy.a99spicy.ui.cart
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.DiffUtil
@@ -16,14 +15,22 @@ private lateinit var viewModel: CartViewModel
 class CartListAdapter(
     private val clickListener: CartListItemClickListener,
     private val owner: ViewModelStoreOwner,
-    private val lifecycleOwner: LifecycleOwner
+    private val onCartListClickListener: CartListAdapter.OnCartListClickListener
 ) :
     ListAdapter<DatabaseCart, CartListAdapter.CartListViewHolder>(CartListDiffUtilCallBack()) {
+
+    interface OnCartListClickListener {
+        fun onCartListItemClick(cart: DatabaseCart)
+    }
 
     class CartListViewHolder(private val binding: CartListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(databaseCart: DatabaseCart, clickListener: CartListItemClickListener) {
+        fun bind(
+            databaseCart: DatabaseCart,
+            clickListener: CartListItemClickListener,
+            onCartListClickListener: OnCartListClickListener
+        ) {
             binding.product = databaseCart
             binding.clickListener = clickListener
             var currentQty = databaseCart.quantity
@@ -37,10 +44,14 @@ class CartListAdapter(
                         databaseCart.name,
                         databaseCart.regularPrice,
                         databaseCart.salePrice,
-                        databaseCart.image, currentQty
+                        databaseCart.image,
+                        currentQty,
+                        databaseCart.catId,
+                        databaseCart.subCatId
                     )
                 )
                 binding.cartProductQtyTv.text = currentQty.toString()
+                onCartListClickListener.onCartListItemClick(databaseCart)
             }
 
             //Set onClickListener to minus qty button
@@ -53,7 +64,10 @@ class CartListAdapter(
                             databaseCart.name,
                             databaseCart.regularPrice,
                             databaseCart.salePrice,
-                            databaseCart.image, currentQty
+                            databaseCart.image,
+                            currentQty,
+                            databaseCart.catId,
+                            databaseCart.subCatId
                         )
                     )
                 } else {
@@ -63,6 +77,7 @@ class CartListAdapter(
                     }
                 }
                 binding.cartProductQtyTv.text = currentQty.toString()
+                onCartListClickListener.onCartListItemClick(databaseCart)
             }
             binding.executePendingBindings()
         }
@@ -88,7 +103,7 @@ class CartListAdapter(
         viewModel = ViewModelProvider(owner).get(CartViewModel::class.java)
         val product = getItem(position)
         product?.let {
-            holder.bind(it, clickListener)
+            holder.bind(it, clickListener, onCartListClickListener)
         }
     }
 }
